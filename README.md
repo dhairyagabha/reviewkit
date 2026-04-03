@@ -1,5 +1,5 @@
 <p align="center">
-  <img src=".github/assets/reviewkit-icon.png" alt="ReactorSDK" width="520">
+  <img src=".github/assets/reviewkit-icon.jpeg" alt="ReactorSDK" width="100">
 </p>
 
 <p align="center">
