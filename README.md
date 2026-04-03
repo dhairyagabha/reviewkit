@@ -1,4 +1,8 @@
 <p align="center">
+  <img src=".github/assets/reviewkit-icon.png" alt="ReactorSDK" width="520">
+</p>
+
+<p align="center">
   <a href="https://github.com/dhairyagabha/reviewkit/actions/workflows/ci.yml">
     <img src="https://github.com/dhairyagabha/reviewkit/actions/workflows/ci.yml/badge.svg" alt="CI">
   </a>
