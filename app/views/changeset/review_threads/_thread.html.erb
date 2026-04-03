@@ -1,0 +1,87 @@
+<% review_frame_id = local_assigns[:frame_id] || dom_id(review, :review) %>
+<% starter_comment = changeset_thread_starter_comment(thread) %>
+
+<%= turbo_frame_tag dom_id(thread) do %>
+  <details class="changeset-thread-accordion" <%= "open" if local_assigns[:expanded] %>>
+    <summary class="changeset-thread-accordion__summary">
+      <div class="changeset-thread-accordion__summary-main">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="font-semibold text-slate-900">
+            <%= changeset_actor_label(starter_comment&.author) %>
+          </span>
+          <span class="<%= changeset_status_pill_class(thread.status) %>">
+            <%= thread.status %>
+          </span>
+          <span class="text-slate-500">line <%= thread.new_line || thread.old_line %></span>
+          <span class="text-slate-400"><%= pluralize(thread.comments.size, "comment") %></span>
+        </div>
+
+        <p class="changeset-thread-accordion__preview">
+          <%= changeset_thread_preview(thread) %>
+        </p>
+      </div>
+
+      <span class="changeset-thread-accordion__chevron" aria-hidden="true">
+        <%= changeset_chevron_right_icon %>
+      </span>
+    </summary>
+
+    <article class="changeset-thread-card">
+      <header class="changeset-thread-card__header">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <% if thread.open? %>
+            <%= button_to "Resolve", resolve_review_thread_path(thread), method: :patch,
+              class: "changeset-button changeset-button--ghost changeset-button--small",
+              params: { frame_id: review_frame_id, view: local_assigns[:view_mode] } %>
+            <%= button_to "Outdated", mark_outdated_review_thread_path(thread), method: :patch,
+              class: "changeset-button changeset-button--ghost changeset-button--small",
+              params: { frame_id: review_frame_id, view: local_assigns[:view_mode] } %>
+          <% else %>
+            <%= button_to "Reopen", reopen_review_thread_path(thread), method: :patch,
+              class: "changeset-button changeset-button--ghost changeset-button--small",
+              params: { frame_id: review_frame_id, view: local_assigns[:view_mode] } %>
+          <% end %>
+        </div>
+
+        <% if changeset_thread_manageable?(thread) %>
+          <div class="changeset-inline-actions" aria-label="Thread actions">
+            <%= link_to edit_review_thread_path(thread, frame_id: review_frame_id, view: local_assigns[:view_mode]),
+              class: "changeset-inline-icon-button",
+              data: { turbo_frame: dom_id(thread) },
+              aria: { label: "Edit thread" },
+              title: "Edit thread" do %>
+              <%= changeset_pencil_icon %>
+            <% end %>
+
+            <%= link_to review_thread_path(thread, frame_id: review_frame_id, view: local_assigns[:view_mode]),
+              class: "changeset-inline-icon-button changeset-inline-icon-button--danger",
+              data: {
+                turbo_method: :delete,
+                turbo_frame: review_frame_id,
+                turbo_confirm: "Delete this thread?"
+              },
+              aria: { label: "Delete thread" },
+              title: "Delete thread" do %>
+              <%= changeset_trash_icon %>
+            <% end %>
+          </div>
+        <% end %>
+      </header>
+
+      <div class="divide-y divide-slate-200">
+        <% thread.comments.each do |comment| %>
+          <%= render "changeset/comments/comment",
+            comment: comment,
+            frame_id: review_frame_id,
+            view_mode: local_assigns[:view_mode] %>
+        <% end %>
+
+        <%= render "changeset/comments/form",
+          frame_id: review_frame_id,
+          review: review,
+          thread: thread,
+          view_mode: local_assigns[:view_mode] %>
+      </div>
+    </article>
+  </details>
+<% end %>

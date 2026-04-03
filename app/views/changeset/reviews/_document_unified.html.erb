@@ -1,0 +1,57 @@
+<table class="changeset-diff-table changeset-diff-table--unified">
+  <colgroup>
+    <col class="w-8">
+    <col class="w-[1%]">
+    <col class="w-[1%]">
+    <col>
+  </colgroup>
+
+  <% document.diff_rows.each do |row| %>
+    <% threads = changeset_threads_for(thread_index, document, row) %>
+    <% unified_rows = changeset_unified_group_rows(row, document: document) %>
+    <% line_code = row.fetch("line_code") %>
+    <% composer_open = open_thread_line_code == line_code %>
+    <tbody class="changeset-line-group">
+      <% unified_rows.each do |unified_row| %>
+        <tr class="<%= changeset_diff_row_class(unified_row) %>">
+          <td class="changeset-diff-cell changeset-diff-cell--action">
+            <% if unified_row["line"].present? %>
+              <%= link_to "+",
+                review_path(review, document_id: document.id, open_thread: line_code, thread_side: (unified_row["side"] == "old" ? "old" : "new"), view: view_mode),
+                class: "changeset-line-action",
+                data: { turbo_frame: frame_id },
+                aria: { label: "Start a thread on this line" } %>
+            <% end %>
+          </td>
+          <td class="changeset-diff-cell changeset-diff-cell--line">
+            <%= changeset_line_number(unified_row["old_line"]) %>
+          </td>
+          <td class="changeset-diff-cell changeset-diff-cell--line">
+            <%= changeset_line_number(unified_row["new_line"]) %>
+          </td>
+          <td class="changeset-diff-cell changeset-diff-cell--code">
+            <%= changeset_highlight_line(
+              unified_row["text"],
+              document.language,
+              inline_ranges: changeset_inline_ranges(unified_row, side: unified_row["side"], document: document),
+              inline_side: unified_row["side"]
+            ) %>
+          </td>
+        </tr>
+      <% end %>
+
+      <%= render "changeset/review_threads/bucket_row",
+        colspan: 4,
+        composer_open: composer_open,
+        composer_side: open_thread_side,
+        document: document,
+        frame_id: frame_id,
+        line_code: line_code,
+        review: review,
+        row: row,
+        thread_errors: [],
+        threads: threads,
+        view_mode: view_mode %>
+    </tbody>
+  <% end %>
+</table>

@@ -1,0 +1,10 @@
+<% flash.each do |type, message| %>
+  <% next if message.blank? %>
+
+  <div class="<%= changeset_flash_shell_class %>" data-changeset-flash-type="<%= type %>">
+    <div class="<%= changeset_flash_class(type) %>" role="<%= changeset_flash_role(type) %>">
+      <span class="changeset-flash__label"><%= changeset_flash_label(type) %></span>
+      <span><%= message %></span>
+    </div>
+  </div>
+<% end %>

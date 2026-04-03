@@ -1,0 +1,11 @@
+<% unless changeset_frame_request? %>
+  <% content_for :head do %>
+    <%= changeset_page_assets %>
+  <% end %>
+
+  <%= changeset_page_module_tag %>
+<% end %>
+
+<%= turbo_frame_tag changeset_review_frame_id(@review) do %>
+  <%= render "changeset/reviews/show_content", review: @review, thread_index: @thread_index %>
+<% end %>

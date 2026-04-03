@@ -1,0 +1,70 @@
+<aside class="changeset-review-sidebar">
+  <div class="changeset-review-sidebar__rail">
+    <div class="space-y-1">
+      <p class="changeset-kicker">Files changed</p>
+      <p class="text-sm text-slate-600">
+        <span class="font-semibold text-slate-900"><%= review.documents.size %></span> files,
+        <span class="font-semibold text-slate-900"><%= review.open_threads_count %></span> open thread<%= "s" unless review.open_threads_count == 1 %>
+      </p>
+      <% if review.external_reference.present? %>
+        <p class="text-xs text-slate-500"><span class="font-medium text-slate-700">Reference:</span> <%= review.external_reference %></p>
+      <% end %>
+    </div>
+
+    <label class="changeset-document-search">
+      <span class="sr-only">Search changed files</span>
+      <input
+        type="search"
+        name="changeset_document_search"
+        placeholder="Jump to file"
+        autocomplete="off"
+        data-action="input->changeset--file-nav#filter"
+        data-changeset--file-nav-target="search"
+      >
+    </label>
+
+    <div class="changeset-document-nav-wrap">
+      <nav class="changeset-document-nav" aria-label="Changed files">
+        <% review.documents.each do |document| %>
+          <% directory, basename = changeset_document_path_parts(document) %>
+          <%= link_to review_path(review, document_id: document.id, view: view_mode),
+            class: [ "changeset-document-link", ("changeset-document-link--active" if document == selected_document) ].compact.join(" "),
+            title: document.path,
+            aria: { label: document.path },
+            data: {
+              turbo_frame: frame_id,
+              "changeset--file-nav-target": "link",
+              path: document.path
+            } do %>
+            <div class="changeset-document-link__content">
+              <%= changeset_file_icon(class_name: "changeset-file-icon changeset-file-icon--nav") %>
+
+              <p class="changeset-document-link__path" title="<%= document.path %>">
+                <% if directory.present? %>
+                  <span class="text-slate-500"><%= directory %></span>
+                <% end %>
+                <span class="font-semibold text-slate-900"><%= basename %></span>
+              </p>
+            </div>
+
+            <span class="changeset-document-link__stats">
+              <span class="font-medium text-emerald-700">+<%= document.additions_count %></span>
+              <span class="font-medium text-rose-700">-<%= document.deletions_count %></span>
+            </span>
+          <% end %>
+        <% end %>
+      </nav>
+
+      <p class="changeset-document-empty hidden" data-changeset--file-nav-target="empty">
+        No changed files match that search.
+      </p>
+    </div>
+
+    <% if review.metadata.present? %>
+      <details class="changeset-sidebar-details">
+        <summary>Review metadata</summary>
+        <pre class="changeset-code-panel"><%= JSON.pretty_generate(review.metadata) %></pre>
+      </details>
+    <% end %>
+  </div>
+</aside>

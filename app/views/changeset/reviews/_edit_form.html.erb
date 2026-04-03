@@ -1,0 +1,35 @@
+<%= form_with model: review,
+  url: review_path(review, document_id: selected_document&.id, view: view_mode),
+  method: :patch,
+  class: "changeset-review-edit-form",
+  data: { turbo_frame: frame_id } do |form| %>
+  <% if review.errors.any? %>
+    <div class="changeset-comment-error">
+      <%= safe_join(review.errors.full_messages.map { |error| content_tag(:div, error) }) %>
+    </div>
+  <% end %>
+
+  <label class="block">
+    <span class="mb-1 block text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">Title</span>
+    <%= form.text_field :title,
+      class: "changeset-textarea",
+      autofocus: true %>
+  </label>
+
+  <label class="block">
+    <span class="mb-1 block text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">Description</span>
+    <%= form.text_area :description,
+      rows: 3,
+      class: "changeset-textarea",
+      placeholder: "Explain what this review is for." %>
+  </label>
+
+  <div class="flex items-center justify-end gap-2">
+    <%= link_to "Cancel",
+      review_path(review, document_id: selected_document&.id, view: view_mode),
+      class: "changeset-button changeset-button--ghost changeset-button--small",
+      data: { turbo_frame: frame_id } %>
+    <%= form.submit "Save",
+      class: "changeset-button changeset-button--primary changeset-button--small" %>
+  </div>
+<% end %>

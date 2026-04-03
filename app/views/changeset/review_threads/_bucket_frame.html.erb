@@ -1,0 +1,13 @@
+<%= turbo_frame_tag changeset_thread_bucket_id(document, line_code) do %>
+  <%= render "changeset/review_threads/bucket",
+    composer_open: local_assigns.fetch(:composer_open, false),
+    composer_side: local_assigns[:composer_side],
+    document: document,
+    frame_id: local_assigns[:frame_id],
+    review: review,
+    row: row,
+    thread_errors: thread_errors,
+    threads: threads,
+    line_code: line_code,
+    view_mode: local_assigns[:view_mode] %>
+<% end %>

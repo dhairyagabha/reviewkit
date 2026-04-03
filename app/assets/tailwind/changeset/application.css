@@ -1,0 +1,865 @@
+@import "tailwindcss";
+
+@source "../../../views/**/*.erb";
+@source "../../../helpers/**/*.rb";
+
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
+
+@layer components {
+  .changeset-page {
+    @apply mx-auto w-full max-w-[1800px] px-3 py-4 sm:px-4 lg:px-5;
+    --changeset-sticky-top: 0px;
+  }
+
+  .changeset-page--embedded {
+    @apply max-w-none;
+  }
+
+  .changeset-index-shell {
+    @apply flex min-h-[calc(100vh-2.5rem)] flex-col gap-4;
+  }
+
+  .changeset-index-heading {
+    @apply flex flex-col gap-3 md:flex-row md:items-end md:justify-between;
+  }
+
+  .changeset-index-heading__copy {
+    @apply space-y-2;
+  }
+
+  .changeset-page-header {
+    @apply rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm;
+  }
+
+  .changeset-page-header--index {
+    @apply flex flex-col gap-3 md:flex-row md:items-end md:justify-between;
+  }
+
+  .changeset-page-header--compact {
+    @apply px-4 py-3;
+  }
+
+  .changeset-kicker {
+    @apply text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500;
+  }
+
+  .changeset-title {
+    @apply text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl;
+  }
+
+  .changeset-title--compact {
+    @apply text-2xl sm:text-3xl;
+  }
+
+  .changeset-subtitle {
+    @apply max-w-3xl text-sm leading-6 text-slate-600 sm:text-base;
+  }
+
+  .changeset-subtitle--compact {
+    @apply text-sm;
+  }
+
+  .changeset-summary-pill {
+    @apply inline-flex items-center gap-2 self-start rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs text-slate-600;
+  }
+
+  .changeset-summary-pill__value {
+    @apply font-semibold text-slate-950;
+  }
+
+  .changeset-card-stack {
+    @apply grid gap-3;
+  }
+
+  .changeset-index-table-shell {
+    @apply overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm;
+  }
+
+  .changeset-index-toolbar {
+    @apply flex flex-col gap-3 border-b border-slate-200 bg-slate-50 px-4 pt-3 pb-0;
+  }
+
+  .changeset-index-toolbar__search {
+    @apply min-w-0;
+  }
+
+  .changeset-index-search {
+    @apply block w-full;
+  }
+
+  .changeset-index-search input {
+    @apply w-full rounded-md border border-slate-300 bg-white px-3 py-1.5 text-[13px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-500 focus:ring-2 focus:ring-slate-200;
+  }
+
+  .changeset-index-tabs {
+    @apply min-w-0;
+  }
+
+  .changeset-index-tabs__select-wrap {
+    @apply grid grid-cols-1 sm:hidden;
+  }
+
+  .changeset-index-tabs__select {
+    @apply col-start-1 row-start-1 w-full appearance-none rounded-md border border-slate-300 bg-white py-1.5 pl-3 pr-8 text-[13px] text-slate-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200;
+  }
+
+  .changeset-index-tabs__select-icon {
+    @apply pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-slate-500;
+  }
+
+  .changeset-index-tabs__desktop {
+    @apply hidden sm:block;
+  }
+
+  .changeset-index-tabs__nav-wrap {
+    @apply border-b border-slate-200;
+  }
+
+  .changeset-index-tabs__nav {
+    @apply -mb-px flex flex-wrap gap-0;
+  }
+
+  .changeset-index-tab {
+    @apply inline-flex cursor-pointer items-center gap-1.5 border-b-2 border-transparent px-3 py-2.5 text-[13px] font-medium whitespace-nowrap text-slate-500 transition hover:border-slate-300 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-200;
+  }
+
+  .changeset-index-tab--active {
+    @apply border-slate-900 text-slate-950 hover:border-slate-900 hover:text-slate-950;
+  }
+
+  .changeset-index-tab__count {
+    @apply hidden rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-700 md:inline-flex;
+  }
+
+  .changeset-index-tab__count--active {
+    @apply bg-slate-900 text-white;
+  }
+
+  .changeset-index-table-wrap {
+    @apply overflow-x-auto;
+  }
+
+  .changeset-index-table {
+    @apply min-w-full border-collapse;
+  }
+
+  .changeset-index-table thead th {
+    @apply border-b border-slate-200 bg-white px-4 py-2 text-left text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500;
+  }
+
+  .changeset-index-table tbody tr {
+    @apply border-b border-slate-200 last:border-b-0;
+  }
+
+  .changeset-index-table tbody tr:hover {
+    @apply bg-slate-50;
+  }
+
+  .changeset-index-table tbody tr[role="link"] {
+    @apply cursor-pointer;
+  }
+
+  .changeset-index-table tbody tr[role="link"]:focus-visible {
+    @apply bg-slate-100 outline-none ring-2 ring-inset ring-slate-300;
+  }
+
+  .changeset-index-table tbody td {
+    @apply align-top px-4 py-3 text-sm text-slate-700;
+  }
+
+  .changeset-index-row__primary {
+    @apply min-w-0 space-y-1.5;
+  }
+
+  .changeset-index-row__title-group {
+    @apply flex flex-wrap items-center gap-2;
+  }
+
+  .changeset-index-row__title {
+    @apply text-[15px] font-semibold text-slate-950 no-underline transition hover:text-slate-700;
+  }
+
+  .changeset-index-row__reference {
+    @apply inline-flex items-center rounded-md border border-slate-200 bg-slate-100 px-2 py-0.5 font-mono text-[11px] text-slate-600;
+  }
+
+  .changeset-index-row__description {
+    @apply max-w-3xl text-sm leading-6 text-slate-600;
+  }
+
+  .changeset-index-row__meta {
+    @apply flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500;
+  }
+
+  .changeset-index-row__status,
+  .changeset-index-row__threads,
+  .changeset-index-row__updated {
+    @apply whitespace-nowrap;
+  }
+
+  .changeset-index-row__threads {
+    @apply text-xs text-slate-500;
+  }
+
+  .changeset-index-row__thread-count {
+    @apply font-semibold text-slate-900;
+  }
+
+  .changeset-index-row__thread-label {
+    @apply ml-1;
+  }
+
+  .changeset-index-row__updated {
+    @apply text-xs text-slate-500;
+  }
+
+  .changeset-index-empty {
+    @apply border-t border-slate-200 px-4 py-5 text-sm text-slate-500;
+  }
+
+  .changeset-panel {
+    @apply rounded-lg border border-slate-200 bg-white shadow-sm;
+  }
+
+  .changeset-panel--interactive {
+    @apply p-4 transition hover:-translate-y-0.5 hover:shadow-md;
+  }
+
+  .changeset-empty-state {
+    @apply flex min-h-56 flex-col justify-center gap-3 px-5 py-8;
+  }
+
+  .changeset-review-layout {
+    @apply grid gap-4 xl:grid-cols-[18rem_minmax(0,1fr)] xl:items-start;
+  }
+
+  .changeset-review-sidebar {
+    @apply hidden xl:block xl:self-start;
+  }
+
+  .changeset-review-sidebar__rail {
+    @apply sticky top-0 grid min-h-0 grid-rows-[auto_auto_minmax(0,1fr)_auto] gap-3 border-r border-slate-200 pr-4 pt-4;
+    top: var(--changeset-sticky-top, 0px);
+    height: min(100%, calc(100dvh - var(--changeset-sticky-top, 0px)));
+    max-height: min(100%, calc(100dvh - var(--changeset-sticky-top, 0px)));
+  }
+
+  .changeset-review-main {
+    @apply min-w-0 space-y-3;
+  }
+
+  .changeset-review-header {
+    @apply space-y-3 border-b border-slate-200 pb-3;
+  }
+
+  .changeset-review-header__top {
+    @apply flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between;
+  }
+
+  .changeset-review-title {
+    @apply text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl;
+  }
+
+  .changeset-review-description {
+    @apply max-w-3xl text-sm leading-6 text-slate-600;
+  }
+
+  .changeset-review-meta {
+    @apply flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-600;
+  }
+
+  .changeset-review-meta-item {
+    @apply inline-flex items-center gap-1 rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs text-slate-600;
+  }
+
+  .changeset-review-mobile-summary {
+    @apply flex flex-wrap gap-x-3 gap-y-1 text-xs text-slate-500;
+  }
+
+  .changeset-review-actions {
+    @apply flex flex-wrap items-center gap-2;
+  }
+
+  .changeset-review-actions form {
+    @apply m-0;
+  }
+
+  .changeset-flash-shell {
+    @apply pb-3;
+  }
+
+  .changeset-flash-shell--page {
+    @apply mx-auto max-w-7xl px-6 pt-4;
+  }
+
+  .changeset-flash-shell--inline {
+    @apply pb-3;
+  }
+
+  .changeset-flash {
+    @apply flex items-start gap-2 rounded-[6px] border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700;
+  }
+
+  .changeset-flash--notice {
+    @apply border-sky-200 bg-sky-50 text-sky-900;
+  }
+
+  .changeset-flash--alert {
+    @apply border-rose-200 bg-rose-50 text-rose-800;
+  }
+
+  .changeset-flash__label {
+    @apply shrink-0 font-semibold text-current;
+  }
+
+  .changeset-review-edit-form {
+    @apply min-w-0 flex-1 space-y-3 rounded-[6px] border border-slate-200 bg-slate-50 p-3;
+  }
+
+  .changeset-files-header {
+    @apply flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2;
+  }
+
+  .changeset-files-header__controls {
+    @apply flex flex-wrap items-center justify-end gap-2;
+  }
+
+  .changeset-files-title {
+    @apply text-base font-semibold text-slate-950;
+  }
+
+  .changeset-files-count {
+    @apply inline-flex min-w-6 items-center justify-center rounded-full border border-slate-300 bg-slate-100 px-1.5 py-0.5 text-[11px] font-semibold text-slate-700;
+  }
+
+  .changeset-files-diffstat {
+    @apply flex items-center gap-3 text-[12px];
+  }
+
+  .changeset-view-toggle {
+    @apply inline-flex items-center rounded-[6px] border border-slate-300 bg-white p-0.5 shadow-sm;
+  }
+
+  .changeset-view-toggle__button {
+    @apply inline-flex min-w-18 items-center justify-center rounded-[5px] px-2.5 py-1 text-xs font-normal text-slate-700 no-underline transition hover:bg-slate-100 hover:text-slate-950;
+  }
+
+  a.changeset-view-toggle__button,
+  a.changeset-view-toggle__button:link,
+  a.changeset-view-toggle__button:visited {
+    color: var(--color-slate-700) !important;
+    text-decoration: none !important;
+  }
+
+  .changeset-view-toggle__button--active {
+    @apply bg-slate-900 text-white hover:bg-slate-900 hover:text-white;
+  }
+
+  a.changeset-view-toggle__button:hover,
+  a.changeset-view-toggle__button:focus-visible {
+    color: var(--color-slate-950) !important;
+  }
+
+  a.changeset-view-toggle__button--active,
+  a.changeset-view-toggle__button--active:link,
+  a.changeset-view-toggle__button--active:visited,
+  a.changeset-view-toggle__button--active:hover,
+  a.changeset-view-toggle__button--active:focus-visible {
+    color: var(--color-white) !important;
+    text-decoration: none !important;
+  }
+
+  .changeset-files-list {
+    @apply space-y-3;
+  }
+
+  .changeset-metric-grid {
+    @apply grid grid-cols-2 gap-2;
+  }
+
+  .changeset-metric-card {
+    @apply rounded-md bg-slate-100 px-2.5 py-2;
+  }
+
+  .changeset-metric-card__label {
+    @apply text-xs text-slate-500;
+  }
+
+  .changeset-metric-card__value {
+    @apply mt-0.5 text-sm font-semibold text-slate-900;
+  }
+
+  .changeset-code-panel {
+    @apply overflow-x-auto rounded-md border border-slate-300 bg-slate-950 p-2.5 text-[11px] leading-5 text-slate-100;
+  }
+
+  .changeset-document-search input {
+    @apply w-full rounded-[6px] border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-500 focus:ring-2 focus:ring-slate-200;
+  }
+
+  .changeset-document-nav-wrap {
+    @apply min-h-0 overflow-y-auto pr-1;
+  }
+
+  .changeset-document-nav {
+    @apply space-y-0.5;
+  }
+
+  .changeset-document-link {
+    @apply flex items-start justify-between gap-2 rounded-[6px] px-2.5 py-1.5 text-sm transition hover:bg-slate-100 focus-visible:bg-slate-100 focus-visible:outline-none;
+  }
+
+  .changeset-document-link:hover .changeset-file-icon,
+  .changeset-document-link:focus-visible .changeset-file-icon {
+    @apply text-slate-700;
+  }
+
+  .changeset-document-link:hover .changeset-document-link__path .text-slate-500,
+  .changeset-document-link:focus-visible .changeset-document-link__path .text-slate-500 {
+    @apply text-slate-600;
+  }
+
+  .changeset-document-link:hover .changeset-document-link__path .text-slate-900,
+  .changeset-document-link:focus-visible .changeset-document-link__path .text-slate-900 {
+    @apply text-slate-950;
+  }
+
+  .changeset-document-link__content {
+    @apply flex min-w-0 items-start gap-2;
+  }
+
+  .changeset-document-link__path {
+    @apply truncate font-mono text-[12px] leading-5;
+  }
+
+  .changeset-document-link__stats {
+    @apply ml-2 flex items-center gap-1.5 pt-0.5 text-[11px];
+  }
+
+  .changeset-document-link--active {
+    @apply bg-slate-100 text-slate-950 ring-1 ring-inset ring-slate-300;
+  }
+
+  .changeset-document-link--active:hover,
+  .changeset-document-link--active:focus-visible {
+    @apply bg-slate-100 text-slate-950 ring-slate-300;
+  }
+
+  .changeset-document-link--active:hover .changeset-file-icon,
+  .changeset-document-link--active:focus-visible .changeset-file-icon,
+  .changeset-document-link--active:hover .changeset-document-link__path,
+  .changeset-document-link--active:focus-visible .changeset-document-link__path,
+  .changeset-document-link--active:hover .changeset-document-link__path .text-slate-500,
+  .changeset-document-link--active:focus-visible .changeset-document-link__path .text-slate-500,
+  .changeset-document-link--active:hover .changeset-document-link__path .text-slate-900,
+  .changeset-document-link--active:focus-visible .changeset-document-link__path .text-slate-900 {
+    @apply text-slate-950;
+  }
+
+  .changeset-document-link--active .changeset-file-icon,
+  .changeset-document-link--active .changeset-document-link__path,
+  .changeset-document-link--active .changeset-document-link__path .text-slate-500,
+  .changeset-document-link--active .changeset-document-link__path .text-slate-900 {
+    @apply text-slate-950;
+  }
+
+  .changeset-document-link--active .changeset-file-icon,
+  .changeset-document-link--active:hover .changeset-file-icon,
+  .changeset-document-link--active:focus-visible .changeset-file-icon {
+    @apply text-slate-700;
+  }
+
+  .changeset-document-link--active .changeset-document-link__path .text-slate-500,
+  .changeset-document-link--active:hover .changeset-document-link__path .text-slate-500,
+  .changeset-document-link--active:focus-visible .changeset-document-link__path .text-slate-500 {
+    @apply text-slate-600;
+  }
+
+  .changeset-document-link--active .changeset-document-link__stats .text-emerald-700,
+  .changeset-document-link--active:hover .changeset-document-link__stats .text-emerald-700,
+  .changeset-document-link--active:focus-visible .changeset-document-link__stats .text-emerald-700 {
+    @apply text-emerald-800;
+  }
+
+  .changeset-document-link--active .changeset-document-link__stats .text-rose-700,
+  .changeset-document-link--active:hover .changeset-document-link__stats .text-rose-700,
+  .changeset-document-link--active:focus-visible .changeset-document-link__stats .text-rose-700 {
+    @apply text-rose-800;
+  }
+
+  .changeset-document-empty {
+    @apply px-2.5 py-2 text-sm text-slate-500;
+  }
+
+  .changeset-status-pill {
+    @apply inline-flex items-center rounded-md bg-amber-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-900;
+  }
+
+  .changeset-status-pill--approved {
+    @apply bg-emerald-100 text-emerald-800;
+  }
+
+  .changeset-status-pill--rejected {
+    @apply bg-rose-100 text-rose-800;
+  }
+
+  .changeset-status-pill--closed {
+    @apply bg-slate-200 text-slate-700;
+  }
+
+  .changeset-status-pill--resolved {
+    @apply bg-emerald-100 text-emerald-800;
+  }
+
+  .changeset-status-pill--outdated {
+    @apply bg-slate-200 text-slate-700;
+  }
+
+  .changeset-status-pill--draft {
+    @apply bg-slate-100 text-slate-600;
+  }
+
+  .changeset-status-pill--dark {
+    @apply bg-slate-900 text-white;
+  }
+
+  .changeset-document-header {
+    @apply border-b border-slate-200 bg-slate-50 px-3 py-2.5;
+  }
+
+  .changeset-file {
+    @apply relative overflow-visible rounded-[6px] border border-slate-300 bg-white;
+    scroll-margin-top: calc(var(--changeset-sticky-top, 0px) + 0.75rem);
+  }
+
+  .changeset-file-header {
+    @apply sticky z-10 flex items-center justify-between gap-3 rounded-t-[5px] border-b border-slate-300 bg-slate-100/95 px-3 py-1.5 backdrop-blur;
+    top: var(--changeset-sticky-top, 0px);
+  }
+
+  .changeset-file-heading {
+    @apply flex min-w-0 items-center gap-2;
+  }
+
+  .changeset-file-icon {
+    @apply size-4 shrink-0 text-slate-500;
+  }
+
+  .changeset-file-icon--nav {
+    @apply mt-0.5 size-3.5;
+  }
+
+  .changeset-file-path {
+    @apply truncate font-mono text-[12px] leading-5;
+  }
+
+  .changeset-file-path__directory {
+    @apply text-slate-500;
+  }
+
+  .changeset-file-path__basename {
+    @apply font-semibold text-slate-900;
+  }
+
+  .changeset-file-meta {
+    @apply flex shrink-0 items-center gap-3 text-[11px] text-slate-500;
+  }
+
+  .changeset-file-table-wrap {
+    @apply overflow-hidden rounded-b-[6px];
+  }
+
+  .changeset-file-table-scroll {
+    @apply overflow-x-auto;
+    overflow-y: hidden;
+  }
+
+  .changeset-file--selected {
+    @apply border-sky-500 shadow-[0_0_0_1px_rgba(14,165,233,0.18)];
+  }
+
+  .changeset-file--selected .changeset-file-header {
+    @apply border-sky-200 bg-sky-50/90;
+  }
+
+  .changeset-sidebar-details {
+    @apply rounded-md border border-slate-200 bg-white;
+  }
+
+  .changeset-sidebar-details summary {
+    @apply cursor-pointer list-none px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500;
+  }
+
+  .changeset-sidebar-details summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .changeset-diff-table {
+    @apply w-full min-w-[1040px] table-fixed border-collapse text-[12px];
+  }
+
+  .changeset-diff-table--unified {
+    @apply min-w-0;
+  }
+
+  .changeset-line {
+    @apply border-t border-slate-200 align-top font-mono text-[12px] leading-5 text-slate-900;
+  }
+
+  .changeset-diff-cell--line {
+    @apply w-px whitespace-nowrap select-none px-2 py-0.5 text-center text-[11px] text-slate-500;
+  }
+
+  .changeset-diff-cell--action {
+    @apply px-1 py-0.5 text-center;
+  }
+
+  .changeset-diff-cell--code {
+    @apply px-2.5 py-0.5;
+  }
+
+  .changeset-diff-cell--split-divider {
+    @apply border-r border-slate-300;
+  }
+
+  .changeset-line--added .changeset-diff-cell--new {
+    @apply bg-emerald-50;
+  }
+
+  .changeset-line--removed .changeset-diff-cell--old {
+    @apply bg-rose-50;
+  }
+
+  .changeset-line--changed .changeset-diff-cell--old {
+    @apply bg-rose-50;
+  }
+
+  .changeset-line--changed .changeset-diff-cell--new {
+    @apply bg-emerald-50;
+  }
+
+  .changeset-diff-table--unified .changeset-line--added .changeset-diff-cell {
+    @apply bg-emerald-50;
+  }
+
+  .changeset-diff-table--unified .changeset-line--removed .changeset-diff-cell,
+  .changeset-diff-table--unified .changeset-line--changed .changeset-diff-cell {
+    @apply bg-rose-50;
+  }
+
+  .changeset-diff-table--unified .changeset-line--context .changeset-diff-cell {
+    @apply bg-white;
+  }
+
+  .changeset-line-action {
+    @apply invisible inline-flex size-4 cursor-pointer items-center justify-center rounded border border-slate-300 bg-white text-[11px] font-semibold text-sky-700 opacity-0 transition hover:border-sky-300 hover:bg-sky-50 hover:text-sky-800 focus-visible:visible focus-visible:opacity-100;
+  }
+
+  .changeset-button {
+    @apply inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-semibold transition;
+  }
+
+  .changeset-button--primary {
+    @apply bg-slate-900 text-white hover:bg-slate-700;
+  }
+
+  .changeset-button--secondary {
+    @apply bg-white text-slate-900 ring-1 ring-slate-300 hover:bg-slate-100;
+  }
+
+  .changeset-button--success {
+    @apply border border-emerald-200 bg-emerald-50 text-emerald-800 hover:border-emerald-300 hover:bg-emerald-100;
+  }
+
+  .changeset-button--danger {
+    @apply border border-rose-200 bg-rose-50 text-rose-800 hover:border-rose-300 hover:bg-rose-100;
+  }
+
+  .changeset-button--ghost {
+    @apply border border-slate-300 bg-white text-slate-700 hover:border-slate-400 hover:text-slate-950;
+  }
+
+  .changeset-button--small {
+    @apply px-2.5 py-1 text-[11px];
+  }
+
+  .changeset-button:disabled {
+    @apply cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400 shadow-none hover:border-slate-200 hover:bg-slate-100 hover:text-slate-400;
+  }
+
+  .changeset-textarea {
+    @apply w-full rounded-[6px] border border-slate-300 bg-white px-3 py-2 text-sm leading-5 text-slate-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200;
+  }
+
+  .changeset-inline-actions {
+    @apply flex items-center gap-1.5;
+  }
+
+  .changeset-inline-icon-button {
+    @apply inline-flex size-8 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 focus-visible:bg-slate-100 focus-visible:text-slate-700 focus-visible:outline-none;
+  }
+
+  .changeset-inline-icon-button--danger {
+    @apply text-rose-600 hover:bg-rose-50 hover:text-rose-700 focus-visible:bg-rose-50 focus-visible:text-rose-700;
+  }
+
+  .changeset-inline-icon {
+    @apply size-4;
+  }
+
+  .changeset-comment-card {
+    @apply bg-white px-3 py-2;
+  }
+
+  .changeset-comment-header {
+    @apply flex items-start justify-between gap-4;
+  }
+
+  .changeset-comment-meta {
+    @apply flex items-center gap-2;
+  }
+
+  .changeset-comment-edited {
+    @apply rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500;
+  }
+
+  .changeset-comment-edit-form {
+    @apply space-y-2 border-t border-slate-200 bg-slate-50 px-3 py-2.5;
+  }
+
+  .changeset-comment-error {
+    @apply border border-rose-200 bg-rose-50 px-2.5 py-1.5 text-xs text-rose-700;
+  }
+
+  .changeset-inline-change {
+    border-radius: 2px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .changeset-inline-change--old {
+    background-color: rgba(254, 205, 211, 0.88);
+    box-shadow: inset 0 0 0 1px rgba(251, 113, 133, 0.32);
+  }
+
+  .changeset-inline-change--new {
+    background-color: rgba(187, 247, 208, 0.92);
+    box-shadow: inset 0 0 0 1px rgba(74, 222, 128, 0.34);
+  }
+
+  .highlight {
+    @apply bg-transparent;
+  }
+
+  .changeset-diff-table .highlight {
+    @apply block bg-transparent whitespace-pre-wrap break-words;
+    line-height: inherit;
+  }
+
+  .changeset-diff-table .highlight pre {
+    @apply m-0 bg-transparent p-0 whitespace-pre-wrap break-words;
+    font: inherit;
+    line-height: inherit;
+  }
+
+  .highlight .k,
+  .highlight .kd,
+  .highlight .kr {
+    @apply text-fuchsia-700;
+  }
+
+  .highlight .nx,
+  .highlight .nf {
+    @apply text-sky-700;
+  }
+
+  .highlight .s,
+  .highlight .s1,
+  .highlight .s2 {
+    @apply text-emerald-700;
+  }
+
+  .highlight .mi,
+  .highlight .mf {
+    @apply text-amber-700;
+  }
+
+  .highlight .c,
+  .highlight .c1 {
+    @apply text-slate-400;
+  }
+
+  .changeset-comment-body p {
+    @apply m-0;
+  }
+
+  .changeset-line-group:hover .changeset-line-action,
+  .changeset-line-action:focus-visible {
+    @apply visible opacity-100;
+  }
+
+  .changeset-thread-bucket-cell {
+    @apply p-0 align-top;
+  }
+
+  .changeset-thread-bucket-cell--split {
+    @apply w-1/2;
+  }
+
+  .changeset-thread-bucket-cell--old {
+    @apply border-r border-slate-300;
+  }
+
+  .changeset-thread-stack {
+    @apply space-y-2 px-2 py-2;
+  }
+
+  .changeset-thread-composer {
+    @apply rounded-[6px] border border-slate-200 bg-white px-3 py-3;
+  }
+
+  .changeset-thread-accordion {
+    @apply overflow-hidden rounded-[6px] border border-slate-300 bg-white;
+  }
+
+  .changeset-thread-accordion__summary {
+    @apply flex cursor-pointer list-none items-start justify-between gap-3 bg-slate-50 px-3 py-2 text-left transition hover:bg-slate-100;
+  }
+
+  .changeset-thread-accordion__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .changeset-thread-accordion__summary-main {
+    @apply min-w-0 flex-1 space-y-1;
+  }
+
+  .changeset-thread-accordion__preview {
+    @apply truncate text-[12px] text-slate-600;
+  }
+
+  .changeset-thread-accordion__chevron {
+    @apply mt-0.5 shrink-0 text-slate-400 transition;
+  }
+
+  .changeset-thread-accordion[open] .changeset-thread-accordion__chevron {
+    @apply rotate-90 text-slate-600;
+  }
+
+  .changeset-thread-card {
+    @apply border-t border-slate-200 bg-white;
+  }
+
+  .changeset-thread-card__header {
+    @apply flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-white px-3 py-2;
+  }
+}

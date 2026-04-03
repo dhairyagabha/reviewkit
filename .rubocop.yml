@@ -1,0 +1,19 @@
+inherit_gem:
+  rubocop-rails-omakase: rubocop.yml
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    - "app/assets/builds/**/*"
+    - "node_modules/**/*"
+    - "pkg/**/*"
+    - "spec/dummy/db/schema.rb"
+    - "tmp/**/*"
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*.rb"
+
+Rails/Output:
+  Exclude:
+    - "lib/generators/**/*.rb"

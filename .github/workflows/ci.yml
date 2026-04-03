@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby:
+          - "3.2"
+          - "3.3"
+          - "3.4"
+          - "4.0"
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+
+      - run: bundle exec rake changeset:build_assets
+      - run: bundle exec bin/rails app:db:prepare
+      - run: bundle exec rspec
+
+  quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0"
+          bundler-cache: true
+
+      - run: bundle exec rake changeset:build_assets
+      - run: bundle exec bin/rails app:db:prepare
+      - run: XDG_CACHE_HOME=/tmp bundle exec rubocop --no-server --cache false
+      - run: bundle exec bin/rails app:zeitwerk:check
+      - run: gem build changeset.gemspec
