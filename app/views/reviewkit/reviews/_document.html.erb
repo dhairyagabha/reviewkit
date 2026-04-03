@@ -1,0 +1,41 @@
+<% directory, basename = reviewkit_document_path_parts(document) %>
+
+<article
+  id="<%= reviewkit_document_anchor(document) %>"
+  class="reviewkit-file reviewkit-file--selected"
+>
+  <header class="reviewkit-file-header">
+    <div class="reviewkit-file-heading">
+      <%= reviewkit_file_icon %>
+
+      <p class="reviewkit-file-path" title="<%= document.path %>" aria-label="<%= document.path %>">
+        <% if directory.present? %>
+          <span class="reviewkit-file-path__directory"><%= directory %></span>
+        <% end %>
+        <span class="reviewkit-file-path__basename"><%= basename %></span>
+      </p>
+    </div>
+
+    <div class="reviewkit-file-meta">
+      <span><%= document.language %></span>
+      <span class="font-medium text-emerald-700">+<%= document.additions_count %></span>
+      <span class="font-medium text-rose-700">-<%= document.deletions_count %></span>
+      <span class="rounded-md px-2 py-0.5 text-[11px] font-semibold <%= reviewkit_document_badge_class(document) %>">
+        <%= document.status %>
+      </span>
+    </div>
+  </header>
+
+  <div class="reviewkit-file-table-wrap">
+    <div class="reviewkit-file-table-scroll">
+      <%= render "reviewkit/reviews/document_#{view_mode}",
+        document: document,
+        frame_id: frame_id,
+        open_thread_line_code: open_thread_line_code,
+        open_thread_side: open_thread_side,
+        review: review,
+        view_mode: view_mode,
+        thread_index: thread_index %>
+    </div>
+  </div>
+</article>

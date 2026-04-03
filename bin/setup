@@ -2,8 +2,8 @@
 set -euo pipefail
 
 bundle install
-bundle exec rake changeset:build_assets
+bundle exec rake reviewkit:build_assets
 bundle exec bin/rails app:db:prepare
 
 echo
-echo "Changeset is ready."
+echo "Reviewkit is ready."

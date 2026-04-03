@@ -8,7 +8,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require "rspec/rails"
 require "factory_bot_rails"
 
-engine_migrations = Changeset::Engine.paths["db/migrate"].existent.map(&:to_s)
+engine_migrations = Reviewkit::Engine.paths["db/migrate"].existent.map(&:to_s)
 dummy_migrations = [ File.expand_path("dummy/db/migrate", __dir__) ]
 all_migration_paths = engine_migrations + dummy_migrations
 ActiveRecord::Migrator.migrations_paths = all_migration_paths
@@ -24,10 +24,10 @@ missing_versions = migration_context.migrations.map { |migration| migration.vers
 
 if missing_versions.any?
   required_tables = %w[
-    changeset_comments
-    changeset_documents
-    changeset_review_threads
-    changeset_reviews
+    reviewkit_comments
+    reviewkit_documents
+    reviewkit_review_threads
+    reviewkit_reviews
     reviewers
   ]
 
@@ -46,12 +46,12 @@ rescue ActiveRecord::PendingMigrationError
   ActiveRecord::Migration.maintain_test_schema!
 end
 
-Dir[Changeset::Engine.root.join("spec/support/**/*.rb")].sort.each { |file| require file }
-FactoryBot.definition_file_paths = [ Changeset::Engine.root.join("spec/factories").to_s ]
+Dir[Reviewkit::Engine.root.join("spec/support/**/*.rb")].sort.each { |file| require file }
+FactoryBot.definition_file_paths = [ Reviewkit::Engine.root.join("spec/factories").to_s ]
 FactoryBot.find_definitions
 
 RSpec.configure do |config|
-  config.fixture_paths = [ Changeset::Engine.root.join("spec/fixtures").to_s ]
+  config.fixture_paths = [ Reviewkit::Engine.root.join("spec/fixtures").to_s ]
   config.use_transactional_fixtures = true
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
@@ -59,14 +59,14 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
   config.before do
-    Changeset.reset_configuration!
-    Changeset::Current.reset
-    Changeset::Review.reset_host_status_transitions! if Changeset::Review.respond_to?(:reset_host_status_transitions!)
+    Reviewkit.reset_configuration!
+    Reviewkit::Current.reset
+    Reviewkit::Review.reset_host_status_transitions! if Reviewkit::Review.respond_to?(:reset_host_status_transitions!)
   end
 
   config.after do
-    Changeset.reset_configuration!
-    Changeset::Current.reset
-    Changeset::Review.reset_host_status_transitions! if Changeset::Review.respond_to?(:reset_host_status_transitions!)
+    Reviewkit.reset_configuration!
+    Reviewkit::Current.reset
+    Reviewkit::Review.reset_host_status_transitions! if Reviewkit::Review.respond_to?(:reset_host_status_transitions!)
   end
 end

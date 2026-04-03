@@ -26,7 +26,7 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
 
-      - run: bundle exec rake changeset:build_assets
+      - run: bundle exec rake reviewkit:build_assets
       - run: bundle exec bin/rails app:db:prepare
       - run: bundle exec rspec
 
@@ -41,8 +41,8 @@ jobs:
           ruby-version: "4.0"
           bundler-cache: true
 
-      - run: bundle exec rake changeset:build_assets
+      - run: bundle exec rake reviewkit:build_assets
       - run: bundle exec bin/rails app:db:prepare
       - run: XDG_CACHE_HOME=/tmp bundle exec rubocop --no-server --cache false
       - run: bundle exec bin/rails app:zeitwerk:check
-      - run: gem build changeset.gemspec
+      - run: gem build reviewkit.gemspec

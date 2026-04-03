@@ -1,0 +1,55 @@
+<% show_bucket = composer_open || thread_errors.present? || threads.present? %>
+
+<tr
+  id="<%= reviewkit_thread_bucket_row_id(document, line_code) %>"
+  class="<%= [("hidden" unless show_bucket), "border-t border-slate-200 bg-slate-50/40"].compact.join(" ") %>"
+>
+  <% if view_mode == "split" %>
+    <% default_side = row&.dig("new_line").present? ? "new" : "old" %>
+    <% old_threads = threads.select { |thread| thread.side == "old" } %>
+    <% new_threads = threads.select { |thread| thread.side == "new" } %>
+    <% active_side = composer_side.presence || default_side %>
+
+    <td colspan="3" class="reviewkit-thread-bucket-cell reviewkit-thread-bucket-cell--split reviewkit-thread-bucket-cell--old">
+      <%= render "reviewkit/review_threads/bucket",
+        composer_open: composer_open && active_side == "old",
+        composer_side: "old",
+        document: document,
+        frame_id: frame_id,
+        line_code: line_code,
+        review: review,
+        row: row,
+        thread_errors: active_side == "old" ? thread_errors : [],
+        threads: old_threads,
+        view_mode: view_mode %>
+    </td>
+
+    <td colspan="3" class="reviewkit-thread-bucket-cell reviewkit-thread-bucket-cell--split reviewkit-thread-bucket-cell--new">
+      <%= render "reviewkit/review_threads/bucket",
+        composer_open: composer_open && active_side == "new",
+        composer_side: "new",
+        document: document,
+        frame_id: frame_id,
+        line_code: line_code,
+        review: review,
+        row: row,
+        thread_errors: active_side == "new" ? thread_errors : [],
+        threads: new_threads,
+        view_mode: view_mode %>
+    </td>
+  <% else %>
+    <td colspan="<%= colspan %>" class="reviewkit-thread-bucket-cell">
+      <%= render "reviewkit/review_threads/bucket",
+        composer_open: composer_open,
+        composer_side: composer_side,
+        document: document,
+        frame_id: frame_id,
+        line_code: line_code,
+        review: review,
+        row: row,
+        thread_errors: thread_errors,
+        threads: threads,
+        view_mode: view_mode %>
+    </td>
+  <% end %>
+</tr>

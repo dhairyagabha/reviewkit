@@ -1,0 +1,164 @@
+<main class="<%= reviewkit_frame_request? ? "reviewkit-page reviewkit-page--embedded" : "reviewkit-page" %>">
+  <% additions = review.documents.sum(&:additions_count) %>
+  <% deletions = review.documents.sum(&:deletions_count) %>
+  <% frame_id = reviewkit_review_frame_id(review) %>
+
+  <section class="reviewkit-review-layout" data-controller="reviewkit--file-nav">
+    <%= render "reviewkit/reviews/review_sidebar",
+      review: review,
+      selected_document: @selected_document,
+      view_mode: @view_mode,
+      frame_id: frame_id %>
+
+    <div class="reviewkit-review-main">
+      <% if reviewkit_frame_request? && (flash[:notice].present? || flash[:alert].present?) %>
+        <%= render "reviewkit/shared/flash" %>
+      <% end %>
+
+      <header class="reviewkit-review-header">
+        <div class="reviewkit-review-header__top">
+          <% if @editing_review %>
+            <%= render "reviewkit/reviews/edit_form",
+              review: review,
+              frame_id: frame_id,
+              selected_document: @selected_document,
+              view_mode: @view_mode %>
+          <% else %>
+            <div class="space-y-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <h1 class="reviewkit-review-title"><%= review.title %></h1>
+                <span class="<%= reviewkit_status_pill_class(review) %>"><%= review.status %></span>
+              </div>
+
+              <% if review.description.present? %>
+                <p class="reviewkit-review-description"><%= review.description %></p>
+              <% end %>
+            </div>
+          <% end %>
+
+          <div class="reviewkit-review-actions">
+            <% unless @editing_review %>
+              <% approval_blocked = review.open_threads_count.positive? %>
+
+              <% unless review.approved? %>
+                <%= button_to "Approve",
+                  approve_review_path(review, document_id: @selected_document&.id, view: @view_mode),
+                  method: :patch,
+                  class: "reviewkit-button reviewkit-button--success",
+                  disabled: approval_blocked,
+                  title: ("Resolve or mark open threads outdated before approving." if approval_blocked),
+                  form: { data: { turbo_frame: frame_id } } %>
+              <% end %>
+
+              <% unless review.rejected? %>
+                <%= button_to "Reject",
+                  reject_review_path(review, document_id: @selected_document&.id, view: @view_mode),
+                  method: :patch,
+                  class: "reviewkit-button reviewkit-button--danger",
+                  form: { data: { turbo_frame: frame_id } } %>
+              <% end %>
+
+              <div class="reviewkit-inline-actions" aria-label="Review actions">
+                <%= link_to edit_review_path(review, document_id: @selected_document&.id, view: @view_mode),
+                  class: "reviewkit-inline-icon-button",
+                  data: { turbo_frame: frame_id },
+                  aria: { label: "Edit review" },
+                  title: "Edit review" do %>
+                  <%= reviewkit_pencil_icon %>
+                <% end %>
+
+                <%= link_to review_path(review),
+                  class: "reviewkit-inline-icon-button reviewkit-inline-icon-button--danger",
+                  data: {
+                    turbo_confirm: "Delete this review?",
+                    turbo_frame: "_top",
+                    turbo_method: :delete
+                  },
+                  aria: { label: "Delete review" },
+                  title: "Delete review" do %>
+                  <%= reviewkit_trash_icon %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="reviewkit-review-meta">
+          <% if review.external_reference.present? %>
+            <span class="reviewkit-review-meta-item">
+              <span class="font-semibold text-slate-700">Reference:</span> <%= review.external_reference %>
+            </span>
+          <% end %>
+          <% if review.creator.present? %>
+            <span class="reviewkit-review-meta-item">
+              <span class="font-semibold text-slate-700">Author:</span> <%= reviewkit_actor_label(review.creator) %>
+            </span>
+          <% end %>
+          <span class="reviewkit-review-meta-item"><%= pluralize(review.documents.size, "file") %> changed</span>
+          <span class="reviewkit-review-meta-item"><%= pluralize(review.open_threads_count, "open thread") %></span>
+          <span class="reviewkit-review-meta-item"><%= pluralize(review.resolved_threads_count, "resolved thread") %></span>
+          <span class="reviewkit-review-meta-item">Updated <%= time_ago_in_words(review.updated_at) %> ago</span>
+        </div>
+      </header>
+
+      <div class="reviewkit-review-mobile-summary xl:hidden">
+        <span><%= pluralize(review.documents.size, "file") %></span>
+        <span><%= pluralize(review.open_threads_count, "open thread") %></span>
+        <span><%= pluralize(review.resolved_threads_count, "resolved thread") %></span>
+        <% if review.external_reference.present? %>
+          <span><%= review.external_reference %></span>
+        <% end %>
+      </div>
+
+      <% if review.metadata.present? %>
+        <details class="reviewkit-sidebar-details xl:hidden">
+          <summary>Review metadata</summary>
+          <pre class="reviewkit-code-panel"><%= JSON.pretty_generate(review.metadata) %></pre>
+        </details>
+      <% end %>
+
+      <div class="reviewkit-files-header">
+        <div class="flex items-center gap-2">
+          <h2 class="reviewkit-files-title">Files changed</h2>
+          <span class="reviewkit-files-count"><%= review.documents.size %></span>
+        </div>
+
+        <div class="reviewkit-files-header__controls">
+          <div class="reviewkit-files-diffstat" aria-label="<%= "#{additions} additions and #{deletions} deletions" %>">
+            <span class="font-medium text-emerald-700">+<%= additions %></span>
+            <span class="font-medium text-rose-700">-<%= deletions %></span>
+          </div>
+
+          <div class="reviewkit-view-toggle" role="group" aria-label="Diff layout">
+            <%= link_to "Split",
+              review_path(review, document_id: @selected_document&.id, view: "split"),
+              class: [ "reviewkit-view-toggle__button", ("reviewkit-view-toggle__button--active" if @view_mode == "split") ].compact.join(" "),
+              data: { turbo_frame: frame_id } %>
+            <%= link_to "Unified",
+              review_path(review, document_id: @selected_document&.id, view: "unified"),
+              class: [ "reviewkit-view-toggle__button", ("reviewkit-view-toggle__button--active" if @view_mode == "unified") ].compact.join(" "),
+              data: { turbo_frame: frame_id } %>
+          </div>
+        </div>
+      </div>
+
+      <section class="reviewkit-files-list">
+        <% if @selected_document.present? %>
+          <%= render "reviewkit/reviews/document",
+            document: @selected_document,
+            frame_id: frame_id,
+            open_thread_line_code: @open_thread_line_code,
+            open_thread_side: @open_thread_side,
+            review: review,
+            view_mode: @view_mode,
+            thread_index: thread_index %>
+        <% else %>
+          <div class="reviewkit-panel reviewkit-empty-state">
+            <p class="reviewkit-kicker">No files available</p>
+            <h2 class="text-2xl font-semibold tracking-tight text-slate-950">This review does not have any documents yet.</h2>
+          </div>
+        <% end %>
+      </section>
+    </div>
+  </section>
+</main>

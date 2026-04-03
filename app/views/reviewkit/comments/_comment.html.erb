@@ -1,0 +1,53 @@
+<% review_frame_id = local_assigns[:frame_id] || dom_id(comment.review_thread.review, :review) %>
+
+<%= turbo_frame_tag dom_id(comment) do %>
+  <article class="reviewkit-comment-card">
+    <header class="reviewkit-comment-header">
+      <div class="reviewkit-comment-meta">
+        <span class="text-[13px] font-semibold text-slate-900">
+          <%= reviewkit_actor_label(comment.author) %>
+        </span>
+
+        <% if reviewkit_comment_edited?(comment) %>
+          <span class="reviewkit-comment-edited">edited</span>
+        <% end %>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <div class="text-[11px] text-slate-500">
+          <%= time_ago_in_words(comment.created_at) %> ago
+        </div>
+
+        <% if reviewkit_comment_manageable?(comment) %>
+          <div class="reviewkit-inline-actions" aria-label="Comment actions">
+            <%= link_to edit_review_thread_comment_path(comment.review_thread, comment),
+              class: "reviewkit-inline-icon-button",
+              data: { turbo_frame: dom_id(comment) },
+              aria: { label: "Edit comment" },
+              title: "Edit comment" do %>
+              <%= reviewkit_pencil_icon %>
+            <% end %>
+
+            <% if reviewkit_comment_destroyable?(comment) %>
+              <%= link_to review_thread_comment_path(comment.review_thread, comment, frame_id: review_frame_id, view: local_assigns[:view_mode]),
+                class: "reviewkit-inline-icon-button reviewkit-inline-icon-button--danger",
+                data: {
+                  turbo_method: :delete,
+                  turbo_frame: review_frame_id,
+                  turbo_confirm: "Delete this comment?"
+                },
+                aria: { label: "Delete comment" },
+                title: "Delete comment" do %>
+                <%= reviewkit_trash_icon %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </header>
+
+    <div class="mt-1.5 text-[13px] leading-5 text-slate-700">
+      <%= reviewkit_render_comment_body(comment) %>
+    </div>
+  </article>
+<% end %>

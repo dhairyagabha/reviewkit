@@ -1,29 +1,29 @@
 <p align="center">
-  <a href="https://github.com/dhairyagabha/changeset/actions/workflows/ci.yml">
-    <img src="https://github.com/dhairyagabha/changeset/actions/workflows/ci.yml/badge.svg" alt="CI">
+  <a href="https://github.com/dhairyagabha/reviewkit/actions/workflows/ci.yml">
+    <img src="https://github.com/dhairyagabha/reviewkit/actions/workflows/ci.yml/badge.svg" alt="CI">
   </a>
-  <a href="https://rubygems.org/gems/changeset">
-    <img src="https://img.shields.io/gem/v/changeset.svg" alt="RubyGems version">
+  <a href="https://rubygems.org/gems/reviewkit">
+    <img src="https://img.shields.io/gem/v/reviewkit.svg" alt="RubyGems version">
   </a>
 </p>
 
 <p align="center">
-  <a href="https://changeset.dhairyagabhawala.com">Documentation</a>
+  <a href="https://reviewkit.dhairyagabhawala.com">Documentation</a>
   ·
-  <a href="https://changeset.dhairyagabhawala.com/examples/live-demo">See the demo</a>
+  <a href="https://reviewkit.dhairyagabhawala.com/examples/live-demo">See the demo</a>
   ·
-  <a href="https://github.com/dhairyagabha/changeset/blob/main/CHANGELOG.md">Changelog</a>
+  <a href="https://github.com/dhairyagabha/reviewkit/blob/main/CHANGELOG.md">Changelog</a>
   ·
-  <a href="https://rubygems.org/gems/changeset">RubyGems</a>
+  <a href="https://rubygems.org/gems/reviewkit">RubyGems</a>
   ·
-  <a href="https://github.com/dhairyagabha/changeset">GitHub</a>
+  <a href="https://github.com/dhairyagabha/reviewkit">GitHub</a>
 </p>
 
-# Changeset
+# Reviewkit
 
-`changeset` is a mountable Rails engine for Git-like review workflows. It stores immutable review documents, renders split and unified diffs, supports threaded line comments, and ships a Rails-only UI built with Turbo, Stimulus, importmap, TailwindCSS, and Rouge.
+`reviewkit` is a mountable Rails engine for Git-like review workflows. It stores immutable review documents, renders split and unified diffs, supports threaded line comments, and ships a Rails-only UI built with Turbo, Stimulus, importmap, TailwindCSS, and Rouge.
 
-The engine stays intentionally generic. Host applications bring their own review source, metadata, permissions, and workflow logic while Changeset handles the review surface itself.
+The engine stays intentionally generic. Host applications bring their own review source, metadata, permissions, and workflow logic while Reviewkit handles the review surface itself.
 
 ## Features
 
@@ -49,42 +49,42 @@ CI currently verifies Ruby `3.2`, `3.3`, `3.4`, and `4.0` against the Rails `8.1
 Add the gem to your Rails app:
 
 ```ruby
-gem "changeset"
+gem "reviewkit"
 ```
 
 Then install it:
 
 ```bash
 bundle install
-bin/rails generate changeset:install
+bin/rails generate reviewkit:install
 bin/rails db:migrate
 ```
 
 The installer:
 
-- copies `config/initializers/changeset.rb`
-- mounts `Changeset::Engine` unless disabled
+- copies `config/initializers/reviewkit.rb`
+- mounts `Reviewkit::Engine` unless disabled
 - installs the engine migrations into the host app
 - creates a minimal `config/importmap.rb` when one does not exist
 
-By default the engine mounts at `/changeset`:
+By default the engine mounts at `/reviewkit`:
 
 ```ruby
-mount Changeset::Engine => "/changeset"
+mount Reviewkit::Engine => "/reviewkit"
 ```
 
 If you want local copies of the shipped UI templates:
 
 ```bash
-bin/rails generate changeset:views
+bin/rails generate reviewkit:views
 ```
 
 ## Create a Review
 
-Host applications provide immutable review documents. The main entry point is `Changeset::Reviews::Create`.
+Host applications provide immutable review documents. The main entry point is `Reviewkit::Reviews::Create`.
 
 ```ruby
-review = Changeset::Reviews::Create.call(
+review = Reviewkit::Reviews::Create.call(
   title: "Checkout submission hardening",
   description: "Review the guard clauses and status changes before merge.",
   creator: current_user,
@@ -117,15 +117,15 @@ review = Changeset::Reviews::Create.call(
 Once created, the mounted UI is available at:
 
 ```text
-/changeset/reviews/:id
+/reviewkit/reviews/:id
 ```
 
 ## Configuration
 
-Changeset keeps configuration deliberately small:
+Reviewkit keeps configuration deliberately small:
 
 ```ruby
-Changeset.configure do |config|
+Reviewkit.configure do |config|
   config.current_actor = lambda do |controller|
     controller.respond_to?(:current_user, true) ? controller.send(:current_user) : nil
   end
@@ -134,7 +134,7 @@ Changeset.configure do |config|
     true
   end
 
-  config.layout = "changeset/application"
+  config.layout = "reviewkit/application"
   config.intraline_limits.max_review_files = 50
   config.intraline_limits.max_changed_lines = 50
   config.intraline_limits.max_line_length = 500
@@ -150,24 +150,24 @@ The most important knobs are:
 
 ## RBS Signatures
 
-Changeset ships RBS for the public engine surface in [`sig/changeset.rbs`](sig/changeset.rbs).
+Reviewkit ships RBS for the public engine surface in [`sig/reviewkit.rbs`](sig/reviewkit.rbs).
 
 The signatures cover:
 
-- `Changeset.configure` and `Changeset.config`
-- `Changeset::Configuration` and `Changeset::Configuration::IntralineLimits`
-- `Changeset::Current`
-- `Changeset::Reviews::Create`
+- `Reviewkit.configure` and `Reviewkit.config`
+- `Reviewkit::Configuration` and `Reviewkit::Configuration::IntralineLimits`
+- `Reviewkit::Current`
+- `Reviewkit::Reviews::Create`
 - the core review records' public workflow helpers
 
 ## Records and Workflow
 
-Changeset ships four core records:
+Reviewkit ships four core records:
 
-- `Changeset::Review`
-- `Changeset::Document`
-- `Changeset::ReviewThread`
-- `Changeset::Comment`
+- `Reviewkit::Review`
+- `Reviewkit::Document`
+- `Reviewkit::ReviewThread`
+- `Reviewkit::Comment`
 
 Review statuses:
 
@@ -192,7 +192,7 @@ Thread statuses:
 
 ## Extend It the Rails Way
 
-Changeset is designed to be extended with normal Rails patterns:
+Reviewkit is designed to be extended with normal Rails patterns:
 
 - use Active Record callbacks in host-side model concerns
 - override protected controller methods in host-side controller concerns
@@ -202,23 +202,23 @@ Changeset is designed to be extended with normal Rails patterns:
 Generate host-side extension concerns:
 
 ```bash
-bin/rails generate changeset:models
-bin/rails generate changeset:controllers
+bin/rails generate reviewkit:models
+bin/rails generate reviewkit:controllers
 ```
 
 After adding a host column like `review_type`, extend the engine through those concerns instead of forking the engine.
 
 Keep host extensions in the normal Rails autoloaded concern paths:
 
-- `app/models/concerns/changeset`
-- `app/controllers/concerns/changeset`
+- `app/models/concerns/reviewkit`
+- `app/controllers/concerns/reviewkit`
 
 The engine's `to_prepare` hooks look up those constants by name, so keeping them in the generated concern paths avoids manual requires and keeps development reloading clean.
 
 Example controller extension:
 
 ```ruby
-module Changeset
+module Reviewkit
   module ReviewsControllerExtension
     protected
 
@@ -231,10 +231,10 @@ end
 
 ## Embed Reviews in Turbo Frames
 
-Changeset review pages can be embedded inside host layouts with Turbo Frames:
+Reviewkit review pages can be embedded inside host layouts with Turbo Frames:
 
 ```erb
-<%= turbo_frame_tag "changeset_review", src: changeset.review_path(review) %>
+<%= turbo_frame_tag "reviewkit_review", src: reviewkit.review_path(review) %>
 ```
 
 Frame requests:
@@ -245,7 +245,7 @@ Frame requests:
 
 ## Metadata
 
-Changeset intentionally keeps integration context in JSON metadata rather than dedicated vendor-specific columns.
+Reviewkit intentionally keeps integration context in JSON metadata rather than dedicated vendor-specific columns.
 
 Typical examples:
 
@@ -268,7 +268,7 @@ thread.metadata = {
 
 ## Notifications
 
-Changeset emits observational `ActiveSupport::Notifications` events for review, thread, and comment lifecycle/status changes.
+Reviewkit emits observational `ActiveSupport::Notifications` events for review, thread, and comment lifecycle/status changes.
 
 These are useful for:
 
@@ -282,14 +282,14 @@ Host applications should still prefer normal Rails callbacks for domain behavior
 
 Full guides, live demos, API details, extension examples, and troubleshooting are available at:
 
-- https://changeset.dhairyagabhawala.com
+- https://reviewkit.dhairyagabhawala.com
 
 Recommended starting points:
 
-- https://changeset.dhairyagabhawala.com/docs/installation
-- https://changeset.dhairyagabhawala.com/docs/quick-start
-- https://changeset.dhairyagabhawala.com/docs/host-integration
-- https://changeset.dhairyagabhawala.com/examples/live-demo
+- https://reviewkit.dhairyagabhawala.com/docs/installation
+- https://reviewkit.dhairyagabhawala.com/docs/quick-start
+- https://reviewkit.dhairyagabhawala.com/docs/host-integration
+- https://reviewkit.dhairyagabhawala.com/examples/live-demo
 
 ## Development
 
@@ -298,14 +298,14 @@ bin/setup
 bin/test
 bin/lint
 bundle exec bin/rails app:zeitwerk:check
-bundle exec rake changeset:build_assets
+bundle exec rake reviewkit:build_assets
 ```
 
 The dummy host app used for engine verification lives under `spec/dummy`.
 
 ## Release Workflow
 
-Changeset is prepared for RubyGems Trusted Publishing with GitHub Actions.
+Reviewkit is prepared for RubyGems Trusted Publishing with GitHub Actions.
 
 Before the first public release:
 

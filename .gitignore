@@ -11,7 +11,7 @@
 /spec/dummy/storage/
 /spec/dummy/db/*.sqlite3
 /spec/dummy/db/*.sqlite3-*
-!/app/assets/builds/changeset/.keep
+!/app/assets/builds/reviewkit/.keep
 .DS_Store
 .idea/
 .vscode/

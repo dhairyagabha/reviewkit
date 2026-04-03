@@ -1,0 +1,29 @@
+<%= turbo_frame_tag dom_id(thread) do %>
+  <%= form_with model: thread, scope: :review_thread, class: "reviewkit-comment-edit-form" do |form| %>
+    <%= form.hidden_field :frame_id, value: local_assigns[:frame_id] %>
+    <%= form.hidden_field :view, value: local_assigns[:view_mode] %>
+    <% if comment.errors.any? %>
+      <div class="reviewkit-comment-error">
+        <%= safe_join(comment.errors.full_messages.map { |error| content_tag(:div, error) }) %>
+      </div>
+    <% end %>
+
+    <label class="block">
+      <span class="mb-1 block text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">Edit thread</span>
+      <%= form.text_area :body,
+        value: comment.body,
+        rows: 3,
+        class: "reviewkit-textarea",
+        autofocus: true %>
+    </label>
+
+    <div class="flex items-center justify-end gap-2">
+      <%= link_to "Cancel",
+        review_thread_path(thread, frame_id: local_assigns[:frame_id], view: local_assigns[:view_mode]),
+        class: "reviewkit-button reviewkit-button--ghost reviewkit-button--small",
+        data: { turbo_frame: dom_id(thread) } %>
+      <%= form.submit "Save",
+        class: "reviewkit-button reviewkit-button--primary reviewkit-button--small" %>
+    </div>
+  <% end %>
+<% end %>

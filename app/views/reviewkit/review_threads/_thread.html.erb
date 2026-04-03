@@ -1,0 +1,87 @@
+<% review_frame_id = local_assigns[:frame_id] || dom_id(review, :review) %>
+<% starter_comment = reviewkit_thread_starter_comment(thread) %>
+
+<%= turbo_frame_tag dom_id(thread) do %>
+  <details class="reviewkit-thread-accordion" <%= "open" if local_assigns[:expanded] %>>
+    <summary class="reviewkit-thread-accordion__summary">
+      <div class="reviewkit-thread-accordion__summary-main">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="font-semibold text-slate-900">
+            <%= reviewkit_actor_label(starter_comment&.author) %>
+          </span>
+          <span class="<%= reviewkit_status_pill_class(thread.status) %>">
+            <%= thread.status %>
+          </span>
+          <span class="text-slate-500">line <%= thread.new_line || thread.old_line %></span>
+          <span class="text-slate-400"><%= pluralize(thread.comments.size, "comment") %></span>
+        </div>
+
+        <p class="reviewkit-thread-accordion__preview">
+          <%= reviewkit_thread_preview(thread) %>
+        </p>
+      </div>
+
+      <span class="reviewkit-thread-accordion__chevron" aria-hidden="true">
+        <%= reviewkit_chevron_right_icon %>
+      </span>
+    </summary>
+
+    <article class="reviewkit-thread-card">
+      <header class="reviewkit-thread-card__header">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <% if thread.open? %>
+            <%= button_to "Resolve", resolve_review_thread_path(thread), method: :patch,
+              class: "reviewkit-button reviewkit-button--ghost reviewkit-button--small",
+              params: { frame_id: review_frame_id, view: local_assigns[:view_mode] } %>
+            <%= button_to "Outdated", mark_outdated_review_thread_path(thread), method: :patch,
+              class: "reviewkit-button reviewkit-button--ghost reviewkit-button--small",
+              params: { frame_id: review_frame_id, view: local_assigns[:view_mode] } %>
+          <% else %>
+            <%= button_to "Reopen", reopen_review_thread_path(thread), method: :patch,
+              class: "reviewkit-button reviewkit-button--ghost reviewkit-button--small",
+              params: { frame_id: review_frame_id, view: local_assigns[:view_mode] } %>
+          <% end %>
+        </div>
+
+        <% if reviewkit_thread_manageable?(thread) %>
+          <div class="reviewkit-inline-actions" aria-label="Thread actions">
+            <%= link_to edit_review_thread_path(thread, frame_id: review_frame_id, view: local_assigns[:view_mode]),
+              class: "reviewkit-inline-icon-button",
+              data: { turbo_frame: dom_id(thread) },
+              aria: { label: "Edit thread" },
+              title: "Edit thread" do %>
+              <%= reviewkit_pencil_icon %>
+            <% end %>
+
+            <%= link_to review_thread_path(thread, frame_id: review_frame_id, view: local_assigns[:view_mode]),
+              class: "reviewkit-inline-icon-button reviewkit-inline-icon-button--danger",
+              data: {
+                turbo_method: :delete,
+                turbo_frame: review_frame_id,
+                turbo_confirm: "Delete this thread?"
+              },
+              aria: { label: "Delete thread" },
+              title: "Delete thread" do %>
+              <%= reviewkit_trash_icon %>
+            <% end %>
+          </div>
+        <% end %>
+      </header>
+
+      <div class="divide-y divide-slate-200">
+        <% thread.comments.each do |comment| %>
+          <%= render "reviewkit/comments/comment",
+            comment: comment,
+            frame_id: review_frame_id,
+            view_mode: local_assigns[:view_mode] %>
+        <% end %>
+
+        <%= render "reviewkit/comments/form",
+          frame_id: review_frame_id,
+          review: review,
+          thread: thread,
+          view_mode: local_assigns[:view_mode] %>
+      </div>
+    </article>
+  </details>
+<% end %>

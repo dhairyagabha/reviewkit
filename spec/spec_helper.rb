@@ -6,7 +6,7 @@ SimpleCov.start "rails" do
   add_filter "/spec/"
   add_filter "/test/"
   add_filter do |source_file|
-    source_file.filename.include?("/lib/generators/changeset/") && source_file.filename.include?("/templates/")
+    source_file.filename.include?("/lib/generators/reviewkit/") && source_file.filename.include?("/templates/")
   end
 
   minimum_coverage 90

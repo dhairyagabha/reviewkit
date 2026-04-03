@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Changeset::Engine.routes.draw do
+Reviewkit::Engine.routes.draw do
   root to: "reviews#index"
 
   resources :reviews, only: %i[index show edit update destroy] do

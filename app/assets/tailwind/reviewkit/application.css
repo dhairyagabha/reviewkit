@@ -1,0 +1,865 @@
+@import "tailwindcss";
+
+@source "../../../views/**/*.erb";
+@source "../../../helpers/**/*.rb";
+
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
+
+@layer components {
+  .reviewkit-page {
+    @apply mx-auto w-full max-w-[1800px] px-3 py-4 sm:px-4 lg:px-5;
+    --reviewkit-sticky-top: 0px;
+  }
+
+  .reviewkit-page--embedded {
+    @apply max-w-none;
+  }
+
+  .reviewkit-index-shell {
+    @apply flex min-h-[calc(100vh-2.5rem)] flex-col gap-4;
+  }
+
+  .reviewkit-index-heading {
+    @apply flex flex-col gap-3 md:flex-row md:items-end md:justify-between;
+  }
+
+  .reviewkit-index-heading__copy {
+    @apply space-y-2;
+  }
+
+  .reviewkit-page-header {
+    @apply rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm;
+  }
+
+  .reviewkit-page-header--index {
+    @apply flex flex-col gap-3 md:flex-row md:items-end md:justify-between;
+  }
+
+  .reviewkit-page-header--compact {
+    @apply px-4 py-3;
+  }
+
+  .reviewkit-kicker {
+    @apply text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500;
+  }
+
+  .reviewkit-title {
+    @apply text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl;
+  }
+
+  .reviewkit-title--compact {
+    @apply text-2xl sm:text-3xl;
+  }
+
+  .reviewkit-subtitle {
+    @apply max-w-3xl text-sm leading-6 text-slate-600 sm:text-base;
+  }
+
+  .reviewkit-subtitle--compact {
+    @apply text-sm;
+  }
+
+  .reviewkit-summary-pill {
+    @apply inline-flex items-center gap-2 self-start rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs text-slate-600;
+  }
+
+  .reviewkit-summary-pill__value {
+    @apply font-semibold text-slate-950;
+  }
+
+  .reviewkit-card-stack {
+    @apply grid gap-3;
+  }
+
+  .reviewkit-index-table-shell {
+    @apply overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm;
+  }
+
+  .reviewkit-index-toolbar {
+    @apply flex flex-col gap-3 border-b border-slate-200 bg-slate-50 px-4 pt-3 pb-0;
+  }
+
+  .reviewkit-index-toolbar__search {
+    @apply min-w-0;
+  }
+
+  .reviewkit-index-search {
+    @apply block w-full;
+  }
+
+  .reviewkit-index-search input {
+    @apply w-full rounded-md border border-slate-300 bg-white px-3 py-1.5 text-[13px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-500 focus:ring-2 focus:ring-slate-200;
+  }
+
+  .reviewkit-index-tabs {
+    @apply min-w-0;
+  }
+
+  .reviewkit-index-tabs__select-wrap {
+    @apply grid grid-cols-1 sm:hidden;
+  }
+
+  .reviewkit-index-tabs__select {
+    @apply col-start-1 row-start-1 w-full appearance-none rounded-md border border-slate-300 bg-white py-1.5 pl-3 pr-8 text-[13px] text-slate-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200;
+  }
+
+  .reviewkit-index-tabs__select-icon {
+    @apply pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-slate-500;
+  }
+
+  .reviewkit-index-tabs__desktop {
+    @apply hidden sm:block;
+  }
+
+  .reviewkit-index-tabs__nav-wrap {
+    @apply border-b border-slate-200;
+  }
+
+  .reviewkit-index-tabs__nav {
+    @apply -mb-px flex flex-wrap gap-0;
+  }
+
+  .reviewkit-index-tab {
+    @apply inline-flex cursor-pointer items-center gap-1.5 border-b-2 border-transparent px-3 py-2.5 text-[13px] font-medium whitespace-nowrap text-slate-500 transition hover:border-slate-300 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-200;
+  }
+
+  .reviewkit-index-tab--active {
+    @apply border-slate-900 text-slate-950 hover:border-slate-900 hover:text-slate-950;
+  }
+
+  .reviewkit-index-tab__count {
+    @apply hidden rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-700 md:inline-flex;
+  }
+
+  .reviewkit-index-tab__count--active {
+    @apply bg-slate-900 text-white;
+  }
+
+  .reviewkit-index-table-wrap {
+    @apply overflow-x-auto;
+  }
+
+  .reviewkit-index-table {
+    @apply min-w-full border-collapse;
+  }
+
+  .reviewkit-index-table thead th {
+    @apply border-b border-slate-200 bg-white px-4 py-2 text-left text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500;
+  }
+
+  .reviewkit-index-table tbody tr {
+    @apply border-b border-slate-200 last:border-b-0;
+  }
+
+  .reviewkit-index-table tbody tr:hover {
+    @apply bg-slate-50;
+  }
+
+  .reviewkit-index-table tbody tr[role="link"] {
+    @apply cursor-pointer;
+  }
+
+  .reviewkit-index-table tbody tr[role="link"]:focus-visible {
+    @apply bg-slate-100 outline-none ring-2 ring-inset ring-slate-300;
+  }
+
+  .reviewkit-index-table tbody td {
+    @apply align-top px-4 py-3 text-sm text-slate-700;
+  }
+
+  .reviewkit-index-row__primary {
+    @apply min-w-0 space-y-1.5;
+  }
+
+  .reviewkit-index-row__title-group {
+    @apply flex flex-wrap items-center gap-2;
+  }
+
+  .reviewkit-index-row__title {
+    @apply text-[15px] font-semibold text-slate-950 no-underline transition hover:text-slate-700;
+  }
+
+  .reviewkit-index-row__reference {
+    @apply inline-flex items-center rounded-md border border-slate-200 bg-slate-100 px-2 py-0.5 font-mono text-[11px] text-slate-600;
+  }
+
+  .reviewkit-index-row__description {
+    @apply max-w-3xl text-sm leading-6 text-slate-600;
+  }
+
+  .reviewkit-index-row__meta {
+    @apply flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500;
+  }
+
+  .reviewkit-index-row__status,
+  .reviewkit-index-row__threads,
+  .reviewkit-index-row__updated {
+    @apply whitespace-nowrap;
+  }
+
+  .reviewkit-index-row__threads {
+    @apply text-xs text-slate-500;
+  }
+
+  .reviewkit-index-row__thread-count {
+    @apply font-semibold text-slate-900;
+  }
+
+  .reviewkit-index-row__thread-label {
+    @apply ml-1;
+  }
+
+  .reviewkit-index-row__updated {
+    @apply text-xs text-slate-500;
+  }
+
+  .reviewkit-index-empty {
+    @apply border-t border-slate-200 px-4 py-5 text-sm text-slate-500;
+  }
+
+  .reviewkit-panel {
+    @apply rounded-lg border border-slate-200 bg-white shadow-sm;
+  }
+
+  .reviewkit-panel--interactive {
+    @apply p-4 transition hover:-translate-y-0.5 hover:shadow-md;
+  }
+
+  .reviewkit-empty-state {
+    @apply flex min-h-56 flex-col justify-center gap-3 px-5 py-8;
+  }
+
+  .reviewkit-review-layout {
+    @apply grid gap-4 xl:grid-cols-[18rem_minmax(0,1fr)] xl:items-start;
+  }
+
+  .reviewkit-review-sidebar {
+    @apply hidden xl:block xl:self-start;
+  }
+
+  .reviewkit-review-sidebar__rail {
+    @apply sticky top-0 grid min-h-0 grid-rows-[auto_auto_minmax(0,1fr)_auto] gap-3 border-r border-slate-200 pr-4 pt-4;
+    top: var(--reviewkit-sticky-top, 0px);
+    height: min(100%, calc(100dvh - var(--reviewkit-sticky-top, 0px)));
+    max-height: min(100%, calc(100dvh - var(--reviewkit-sticky-top, 0px)));
+  }
+
+  .reviewkit-review-main {
+    @apply min-w-0 space-y-3;
+  }
+
+  .reviewkit-review-header {
+    @apply space-y-3 border-b border-slate-200 pb-3;
+  }
+
+  .reviewkit-review-header__top {
+    @apply flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between;
+  }
+
+  .reviewkit-review-title {
+    @apply text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl;
+  }
+
+  .reviewkit-review-description {
+    @apply max-w-3xl text-sm leading-6 text-slate-600;
+  }
+
+  .reviewkit-review-meta {
+    @apply flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-600;
+  }
+
+  .reviewkit-review-meta-item {
+    @apply inline-flex items-center gap-1 rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs text-slate-600;
+  }
+
+  .reviewkit-review-mobile-summary {
+    @apply flex flex-wrap gap-x-3 gap-y-1 text-xs text-slate-500;
+  }
+
+  .reviewkit-review-actions {
+    @apply flex flex-wrap items-center gap-2;
+  }
+
+  .reviewkit-review-actions form {
+    @apply m-0;
+  }
+
+  .reviewkit-flash-shell {
+    @apply pb-3;
+  }
+
+  .reviewkit-flash-shell--page {
+    @apply mx-auto max-w-7xl px-6 pt-4;
+  }
+
+  .reviewkit-flash-shell--inline {
+    @apply pb-3;
+  }
+
+  .reviewkit-flash {
+    @apply flex items-start gap-2 rounded-[6px] border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700;
+  }
+
+  .reviewkit-flash--notice {
+    @apply border-sky-200 bg-sky-50 text-sky-900;
+  }
+
+  .reviewkit-flash--alert {
+    @apply border-rose-200 bg-rose-50 text-rose-800;
+  }
+
+  .reviewkit-flash__label {
+    @apply shrink-0 font-semibold text-current;
+  }
+
+  .reviewkit-review-edit-form {
+    @apply min-w-0 flex-1 space-y-3 rounded-[6px] border border-slate-200 bg-slate-50 p-3;
+  }
+
+  .reviewkit-files-header {
+    @apply flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2;
+  }
+
+  .reviewkit-files-header__controls {
+    @apply flex flex-wrap items-center justify-end gap-2;
+  }
+
+  .reviewkit-files-title {
+    @apply text-base font-semibold text-slate-950;
+  }
+
+  .reviewkit-files-count {
+    @apply inline-flex min-w-6 items-center justify-center rounded-full border border-slate-300 bg-slate-100 px-1.5 py-0.5 text-[11px] font-semibold text-slate-700;
+  }
+
+  .reviewkit-files-diffstat {
+    @apply flex items-center gap-3 text-[12px];
+  }
+
+  .reviewkit-view-toggle {
+    @apply inline-flex items-center rounded-[6px] border border-slate-300 bg-white p-0.5 shadow-sm;
+  }
+
+  .reviewkit-view-toggle__button {
+    @apply inline-flex min-w-18 items-center justify-center rounded-[5px] px-2.5 py-1 text-xs font-normal text-slate-700 no-underline transition hover:bg-slate-100 hover:text-slate-950;
+  }
+
+  a.reviewkit-view-toggle__button,
+  a.reviewkit-view-toggle__button:link,
+  a.reviewkit-view-toggle__button:visited {
+    color: var(--color-slate-700) !important;
+    text-decoration: none !important;
+  }
+
+  .reviewkit-view-toggle__button--active {
+    @apply bg-slate-900 text-white hover:bg-slate-900 hover:text-white;
+  }
+
+  a.reviewkit-view-toggle__button:hover,
+  a.reviewkit-view-toggle__button:focus-visible {
+    color: var(--color-slate-950) !important;
+  }
+
+  a.reviewkit-view-toggle__button--active,
+  a.reviewkit-view-toggle__button--active:link,
+  a.reviewkit-view-toggle__button--active:visited,
+  a.reviewkit-view-toggle__button--active:hover,
+  a.reviewkit-view-toggle__button--active:focus-visible {
+    color: var(--color-white) !important;
+    text-decoration: none !important;
+  }
+
+  .reviewkit-files-list {
+    @apply space-y-3;
+  }
+
+  .reviewkit-metric-grid {
+    @apply grid grid-cols-2 gap-2;
+  }
+
+  .reviewkit-metric-card {
+    @apply rounded-md bg-slate-100 px-2.5 py-2;
+  }
+
+  .reviewkit-metric-card__label {
+    @apply text-xs text-slate-500;
+  }
+
+  .reviewkit-metric-card__value {
+    @apply mt-0.5 text-sm font-semibold text-slate-900;
+  }
+
+  .reviewkit-code-panel {
+    @apply overflow-x-auto rounded-md border border-slate-300 bg-slate-950 p-2.5 text-[11px] leading-5 text-slate-100;
+  }
+
+  .reviewkit-document-search input {
+    @apply w-full rounded-[6px] border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-500 focus:ring-2 focus:ring-slate-200;
+  }
+
+  .reviewkit-document-nav-wrap {
+    @apply min-h-0 overflow-y-auto pr-1;
+  }
+
+  .reviewkit-document-nav {
+    @apply space-y-0.5;
+  }
+
+  .reviewkit-document-link {
+    @apply flex items-start justify-between gap-2 rounded-[6px] px-2.5 py-1.5 text-sm transition hover:bg-slate-100 focus-visible:bg-slate-100 focus-visible:outline-none;
+  }
+
+  .reviewkit-document-link:hover .reviewkit-file-icon,
+  .reviewkit-document-link:focus-visible .reviewkit-file-icon {
+    @apply text-slate-700;
+  }
+
+  .reviewkit-document-link:hover .reviewkit-document-link__path .text-slate-500,
+  .reviewkit-document-link:focus-visible .reviewkit-document-link__path .text-slate-500 {
+    @apply text-slate-600;
+  }
+
+  .reviewkit-document-link:hover .reviewkit-document-link__path .text-slate-900,
+  .reviewkit-document-link:focus-visible .reviewkit-document-link__path .text-slate-900 {
+    @apply text-slate-950;
+  }
+
+  .reviewkit-document-link__content {
+    @apply flex min-w-0 items-start gap-2;
+  }
+
+  .reviewkit-document-link__path {
+    @apply truncate font-mono text-[12px] leading-5;
+  }
+
+  .reviewkit-document-link__stats {
+    @apply ml-2 flex items-center gap-1.5 pt-0.5 text-[11px];
+  }
+
+  .reviewkit-document-link--active {
+    @apply bg-slate-100 text-slate-950 ring-1 ring-inset ring-slate-300;
+  }
+
+  .reviewkit-document-link--active:hover,
+  .reviewkit-document-link--active:focus-visible {
+    @apply bg-slate-100 text-slate-950 ring-slate-300;
+  }
+
+  .reviewkit-document-link--active:hover .reviewkit-file-icon,
+  .reviewkit-document-link--active:focus-visible .reviewkit-file-icon,
+  .reviewkit-document-link--active:hover .reviewkit-document-link__path,
+  .reviewkit-document-link--active:focus-visible .reviewkit-document-link__path,
+  .reviewkit-document-link--active:hover .reviewkit-document-link__path .text-slate-500,
+  .reviewkit-document-link--active:focus-visible .reviewkit-document-link__path .text-slate-500,
+  .reviewkit-document-link--active:hover .reviewkit-document-link__path .text-slate-900,
+  .reviewkit-document-link--active:focus-visible .reviewkit-document-link__path .text-slate-900 {
+    @apply text-slate-950;
+  }
+
+  .reviewkit-document-link--active .reviewkit-file-icon,
+  .reviewkit-document-link--active .reviewkit-document-link__path,
+  .reviewkit-document-link--active .reviewkit-document-link__path .text-slate-500,
+  .reviewkit-document-link--active .reviewkit-document-link__path .text-slate-900 {
+    @apply text-slate-950;
+  }
+
+  .reviewkit-document-link--active .reviewkit-file-icon,
+  .reviewkit-document-link--active:hover .reviewkit-file-icon,
+  .reviewkit-document-link--active:focus-visible .reviewkit-file-icon {
+    @apply text-slate-700;
+  }
+
+  .reviewkit-document-link--active .reviewkit-document-link__path .text-slate-500,
+  .reviewkit-document-link--active:hover .reviewkit-document-link__path .text-slate-500,
+  .reviewkit-document-link--active:focus-visible .reviewkit-document-link__path .text-slate-500 {
+    @apply text-slate-600;
+  }
+
+  .reviewkit-document-link--active .reviewkit-document-link__stats .text-emerald-700,
+  .reviewkit-document-link--active:hover .reviewkit-document-link__stats .text-emerald-700,
+  .reviewkit-document-link--active:focus-visible .reviewkit-document-link__stats .text-emerald-700 {
+    @apply text-emerald-800;
+  }
+
+  .reviewkit-document-link--active .reviewkit-document-link__stats .text-rose-700,
+  .reviewkit-document-link--active:hover .reviewkit-document-link__stats .text-rose-700,
+  .reviewkit-document-link--active:focus-visible .reviewkit-document-link__stats .text-rose-700 {
+    @apply text-rose-800;
+  }
+
+  .reviewkit-document-empty {
+    @apply px-2.5 py-2 text-sm text-slate-500;
+  }
+
+  .reviewkit-status-pill {
+    @apply inline-flex items-center rounded-md bg-amber-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-900;
+  }
+
+  .reviewkit-status-pill--approved {
+    @apply bg-emerald-100 text-emerald-800;
+  }
+
+  .reviewkit-status-pill--rejected {
+    @apply bg-rose-100 text-rose-800;
+  }
+
+  .reviewkit-status-pill--closed {
+    @apply bg-slate-200 text-slate-700;
+  }
+
+  .reviewkit-status-pill--resolved {
+    @apply bg-emerald-100 text-emerald-800;
+  }
+
+  .reviewkit-status-pill--outdated {
+    @apply bg-slate-200 text-slate-700;
+  }
+
+  .reviewkit-status-pill--draft {
+    @apply bg-slate-100 text-slate-600;
+  }
+
+  .reviewkit-status-pill--dark {
+    @apply bg-slate-900 text-white;
+  }
+
+  .reviewkit-document-header {
+    @apply border-b border-slate-200 bg-slate-50 px-3 py-2.5;
+  }
+
+  .reviewkit-file {
+    @apply relative overflow-visible rounded-[6px] border border-slate-300 bg-white;
+    scroll-margin-top: calc(var(--reviewkit-sticky-top, 0px) + 0.75rem);
+  }
+
+  .reviewkit-file-header {
+    @apply sticky z-10 flex items-center justify-between gap-3 rounded-t-[5px] border-b border-slate-300 bg-slate-100/95 px-3 py-1.5 backdrop-blur;
+    top: var(--reviewkit-sticky-top, 0px);
+  }
+
+  .reviewkit-file-heading {
+    @apply flex min-w-0 items-center gap-2;
+  }
+
+  .reviewkit-file-icon {
+    @apply size-4 shrink-0 text-slate-500;
+  }
+
+  .reviewkit-file-icon--nav {
+    @apply mt-0.5 size-3.5;
+  }
+
+  .reviewkit-file-path {
+    @apply truncate font-mono text-[12px] leading-5;
+  }
+
+  .reviewkit-file-path__directory {
+    @apply text-slate-500;
+  }
+
+  .reviewkit-file-path__basename {
+    @apply font-semibold text-slate-900;
+  }
+
+  .reviewkit-file-meta {
+    @apply flex shrink-0 items-center gap-3 text-[11px] text-slate-500;
+  }
+
+  .reviewkit-file-table-wrap {
+    @apply overflow-hidden rounded-b-[6px];
+  }
+
+  .reviewkit-file-table-scroll {
+    @apply overflow-x-auto;
+    overflow-y: hidden;
+  }
+
+  .reviewkit-file--selected {
+    @apply border-sky-500 shadow-[0_0_0_1px_rgba(14,165,233,0.18)];
+  }
+
+  .reviewkit-file--selected .reviewkit-file-header {
+    @apply border-sky-200 bg-sky-50/90;
+  }
+
+  .reviewkit-sidebar-details {
+    @apply rounded-md border border-slate-200 bg-white;
+  }
+
+  .reviewkit-sidebar-details summary {
+    @apply cursor-pointer list-none px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500;
+  }
+
+  .reviewkit-sidebar-details summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .reviewkit-diff-table {
+    @apply w-full min-w-[1040px] table-fixed border-collapse text-[12px];
+  }
+
+  .reviewkit-diff-table--unified {
+    @apply min-w-0;
+  }
+
+  .reviewkit-line {
+    @apply border-t border-slate-200 align-top font-mono text-[12px] leading-5 text-slate-900;
+  }
+
+  .reviewkit-diff-cell--line {
+    @apply w-px whitespace-nowrap select-none px-2 py-0.5 text-center text-[11px] text-slate-500;
+  }
+
+  .reviewkit-diff-cell--action {
+    @apply px-1 py-0.5 text-center;
+  }
+
+  .reviewkit-diff-cell--code {
+    @apply px-2.5 py-0.5;
+  }
+
+  .reviewkit-diff-cell--split-divider {
+    @apply border-r border-slate-300;
+  }
+
+  .reviewkit-line--added .reviewkit-diff-cell--new {
+    @apply bg-emerald-50;
+  }
+
+  .reviewkit-line--removed .reviewkit-diff-cell--old {
+    @apply bg-rose-50;
+  }
+
+  .reviewkit-line--changed .reviewkit-diff-cell--old {
+    @apply bg-rose-50;
+  }
+
+  .reviewkit-line--changed .reviewkit-diff-cell--new {
+    @apply bg-emerald-50;
+  }
+
+  .reviewkit-diff-table--unified .reviewkit-line--added .reviewkit-diff-cell {
+    @apply bg-emerald-50;
+  }
+
+  .reviewkit-diff-table--unified .reviewkit-line--removed .reviewkit-diff-cell,
+  .reviewkit-diff-table--unified .reviewkit-line--changed .reviewkit-diff-cell {
+    @apply bg-rose-50;
+  }
+
+  .reviewkit-diff-table--unified .reviewkit-line--context .reviewkit-diff-cell {
+    @apply bg-white;
+  }
+
+  .reviewkit-line-action {
+    @apply invisible inline-flex size-4 cursor-pointer items-center justify-center rounded border border-slate-300 bg-white text-[11px] font-semibold text-sky-700 opacity-0 transition hover:border-sky-300 hover:bg-sky-50 hover:text-sky-800 focus-visible:visible focus-visible:opacity-100;
+  }
+
+  .reviewkit-button {
+    @apply inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-semibold transition;
+  }
+
+  .reviewkit-button--primary {
+    @apply bg-slate-900 text-white hover:bg-slate-700;
+  }
+
+  .reviewkit-button--secondary {
+    @apply bg-white text-slate-900 ring-1 ring-slate-300 hover:bg-slate-100;
+  }
+
+  .reviewkit-button--success {
+    @apply border border-emerald-200 bg-emerald-50 text-emerald-800 hover:border-emerald-300 hover:bg-emerald-100;
+  }
+
+  .reviewkit-button--danger {
+    @apply border border-rose-200 bg-rose-50 text-rose-800 hover:border-rose-300 hover:bg-rose-100;
+  }
+
+  .reviewkit-button--ghost {
+    @apply border border-slate-300 bg-white text-slate-700 hover:border-slate-400 hover:text-slate-950;
+  }
+
+  .reviewkit-button--small {
+    @apply px-2.5 py-1 text-[11px];
+  }
+
+  .reviewkit-button:disabled {
+    @apply cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400 shadow-none hover:border-slate-200 hover:bg-slate-100 hover:text-slate-400;
+  }
+
+  .reviewkit-textarea {
+    @apply w-full rounded-[6px] border border-slate-300 bg-white px-3 py-2 text-sm leading-5 text-slate-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200;
+  }
+
+  .reviewkit-inline-actions {
+    @apply flex items-center gap-1.5;
+  }
+
+  .reviewkit-inline-icon-button {
+    @apply inline-flex size-8 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 focus-visible:bg-slate-100 focus-visible:text-slate-700 focus-visible:outline-none;
+  }
+
+  .reviewkit-inline-icon-button--danger {
+    @apply text-rose-600 hover:bg-rose-50 hover:text-rose-700 focus-visible:bg-rose-50 focus-visible:text-rose-700;
+  }
+
+  .reviewkit-inline-icon {
+    @apply size-4;
+  }
+
+  .reviewkit-comment-card {
+    @apply bg-white px-3 py-2;
+  }
+
+  .reviewkit-comment-header {
+    @apply flex items-start justify-between gap-4;
+  }
+
+  .reviewkit-comment-meta {
+    @apply flex items-center gap-2;
+  }
+
+  .reviewkit-comment-edited {
+    @apply rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500;
+  }
+
+  .reviewkit-comment-edit-form {
+    @apply space-y-2 border-t border-slate-200 bg-slate-50 px-3 py-2.5;
+  }
+
+  .reviewkit-comment-error {
+    @apply border border-rose-200 bg-rose-50 px-2.5 py-1.5 text-xs text-rose-700;
+  }
+
+  .reviewkit-inline-change {
+    border-radius: 2px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .reviewkit-inline-change--old {
+    background-color: rgba(254, 205, 211, 0.88);
+    box-shadow: inset 0 0 0 1px rgba(251, 113, 133, 0.32);
+  }
+
+  .reviewkit-inline-change--new {
+    background-color: rgba(187, 247, 208, 0.92);
+    box-shadow: inset 0 0 0 1px rgba(74, 222, 128, 0.34);
+  }
+
+  .highlight {
+    @apply bg-transparent;
+  }
+
+  .reviewkit-diff-table .highlight {
+    @apply block bg-transparent whitespace-pre-wrap break-words;
+    line-height: inherit;
+  }
+
+  .reviewkit-diff-table .highlight pre {
+    @apply m-0 bg-transparent p-0 whitespace-pre-wrap break-words;
+    font: inherit;
+    line-height: inherit;
+  }
+
+  .highlight .k,
+  .highlight .kd,
+  .highlight .kr {
+    @apply text-fuchsia-700;
+  }
+
+  .highlight .nx,
+  .highlight .nf {
+    @apply text-sky-700;
+  }
+
+  .highlight .s,
+  .highlight .s1,
+  .highlight .s2 {
+    @apply text-emerald-700;
+  }
+
+  .highlight .mi,
+  .highlight .mf {
+    @apply text-amber-700;
+  }
+
+  .highlight .c,
+  .highlight .c1 {
+    @apply text-slate-400;
+  }
+
+  .reviewkit-comment-body p {
+    @apply m-0;
+  }
+
+  .reviewkit-line-group:hover .reviewkit-line-action,
+  .reviewkit-line-action:focus-visible {
+    @apply visible opacity-100;
+  }
+
+  .reviewkit-thread-bucket-cell {
+    @apply p-0 align-top;
+  }
+
+  .reviewkit-thread-bucket-cell--split {
+    @apply w-1/2;
+  }
+
+  .reviewkit-thread-bucket-cell--old {
+    @apply border-r border-slate-300;
+  }
+
+  .reviewkit-thread-stack {
+    @apply space-y-2 px-2 py-2;
+  }
+
+  .reviewkit-thread-composer {
+    @apply rounded-[6px] border border-slate-200 bg-white px-3 py-3;
+  }
+
+  .reviewkit-thread-accordion {
+    @apply overflow-hidden rounded-[6px] border border-slate-300 bg-white;
+  }
+
+  .reviewkit-thread-accordion__summary {
+    @apply flex cursor-pointer list-none items-start justify-between gap-3 bg-slate-50 px-3 py-2 text-left transition hover:bg-slate-100;
+  }
+
+  .reviewkit-thread-accordion__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .reviewkit-thread-accordion__summary-main {
+    @apply min-w-0 flex-1 space-y-1;
+  }
+
+  .reviewkit-thread-accordion__preview {
+    @apply truncate text-[12px] text-slate-600;
+  }
+
+  .reviewkit-thread-accordion__chevron {
+    @apply mt-0.5 shrink-0 text-slate-400 transition;
+  }
+
+  .reviewkit-thread-accordion[open] .reviewkit-thread-accordion__chevron {
+    @apply rotate-90 text-slate-600;
+  }
+
+  .reviewkit-thread-card {
+    @apply border-t border-slate-200 bg-white;
+  }
+
+  .reviewkit-thread-card__header {
+    @apply flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-white px-3 py-2;
+  }
+}

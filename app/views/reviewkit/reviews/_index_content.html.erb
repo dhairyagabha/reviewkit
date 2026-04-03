@@ -1,0 +1,160 @@
+<main class="<%= reviewkit_frame_request? ? "reviewkit-page reviewkit-page--embedded" : "reviewkit-page" %>">
+  <section class="reviewkit-index-shell" data-controller="reviewkit--review-index">
+    <% status_options = {
+      "all" => { label: "All", count: reviews.size },
+      "open" => { label: "Open", count: reviews.count { |review| review.status == "open" } },
+      "approved" => { label: "Approved", count: reviews.count { |review| review.status == "approved" } },
+      "rejected" => { label: "Rejected", count: reviews.count { |review| review.status == "rejected" } },
+      "closed" => { label: "Closed", count: reviews.count { |review| review.status == "closed" } }
+    } %>
+
+    <header class="reviewkit-index-heading">
+      <div class="reviewkit-index-heading__copy">
+        <h1 class="reviewkit-title reviewkit-title--compact">Reviews</h1>
+        <p class="reviewkit-subtitle reviewkit-subtitle--compact">
+          Search open work, filter by status, and jump directly into a review.
+        </p>
+      </div>
+
+      <div class="reviewkit-summary-pill">
+        <span class="reviewkit-summary-pill__value" data-reviewkit--review-index-target="count"><%= reviews.size %></span>
+        <span>visible</span>
+      </div>
+    </header>
+
+    <% if reviews.any? %>
+      <section class="reviewkit-panel reviewkit-index-table-shell">
+        <div class="reviewkit-index-toolbar">
+          <div class="reviewkit-index-toolbar__search">
+            <label class="reviewkit-index-search">
+              <span class="sr-only">Search reviews</span>
+              <input
+                type="search"
+                name="reviewkit_review_search"
+                placeholder="Filter reviews by title, reference, or description"
+                autocomplete="off"
+                data-action="input->reviewkit--review-index#filter"
+                data-reviewkit--review-index-target="search"
+              >
+            </label>
+          </div>
+
+          <div class="reviewkit-index-tabs">
+            <div class="reviewkit-index-tabs__select-wrap">
+              <label class="sr-only" for="reviewkit-review-status-filter">Filter reviews by status</label>
+              <select
+                id="reviewkit-review-status-filter"
+                class="reviewkit-index-tabs__select"
+                aria-label="Filter reviews by status"
+                data-action="change->reviewkit--review-index#selectStatusFilter"
+                data-reviewkit--review-index-target="select"
+              >
+                <% status_options.each do |status, option| %>
+                  <option value="<%= status %>"<%= status == "all" ? " selected" : "" %>><%= option[:label] %></option>
+                <% end %>
+              </select>
+              <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" class="reviewkit-index-tabs__select-icon">
+                <path d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
+              </svg>
+            </div>
+
+            <div class="reviewkit-index-tabs__desktop">
+              <div class="reviewkit-index-tabs__nav-wrap">
+                <nav class="reviewkit-index-tabs__nav" aria-label="Filter reviews by status">
+                  <% status_options.each do |status, option| %>
+                    <% active = status == "all" %>
+                    <button
+                      type="button"
+                      role="tab"
+                      class="reviewkit-index-tab<%= active ? " reviewkit-index-tab--active" : "" %>"
+                      data-action="reviewkit--review-index#applyStatusFilter"
+                      data-reviewkit--review-index-target="filter"
+                      data-status="<%= status %>"
+                      aria-selected="<%= active %>"
+                      tabindex="<%= active ? 0 : -1 %>"
+                    >
+                      <span><%= option[:label] %></span>
+                      <span class="reviewkit-index-tab__count<%= active ? " reviewkit-index-tab__count--active" : "" %>"><%= option[:count] %></span>
+                    </button>
+                  <% end %>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reviewkit-index-table-wrap">
+          <table class="reviewkit-index-table">
+            <thead>
+              <tr>
+                <th scope="col">Review</th>
+                <th scope="col">Status</th>
+                <th scope="col">Threads</th>
+                <th scope="col">Updated</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% reviews.each do |review| %>
+                <% search_text = [review.title, review.external_reference, review.description].compact.join(" ") %>
+                <tr
+                  tabindex="0"
+                  role="link"
+                  aria-label="Open review <%= review.title %>"
+                  data-action="click->reviewkit--review-index#openRow keydown->reviewkit--review-index#openRowFromKeyboard"
+                  data-reviewkit--review-index-target="row"
+                  data-search="<%= search_text %>"
+                  data-status="<%= review.status %>"
+                  data-url="<%= review_path(review) %>"
+                >
+                  <td>
+                    <div class="reviewkit-index-row__primary">
+                      <div class="reviewkit-index-row__title-group">
+                        <%= link_to review.title, review_path(review), class: "reviewkit-index-row__title" %>
+                        <% if review.external_reference.present? %>
+                          <span class="reviewkit-index-row__reference"><%= review.external_reference %></span>
+                        <% end %>
+                      </div>
+
+                      <% if review.description.present? %>
+                        <p class="reviewkit-index-row__description"><%= truncate(review.description, length: 180) %></p>
+                      <% end %>
+
+                      <div class="reviewkit-index-row__meta">
+                        <span><%= pluralize(review.documents.size, "document") %></span>
+                        <% if review.reviewable_type.present? %>
+                          <span><%= review.reviewable_type %></span>
+                        <% end %>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="reviewkit-index-row__status">
+                    <span class="<%= reviewkit_status_pill_class(review) %>"><%= review.status %></span>
+                  </td>
+                  <td class="reviewkit-index-row__threads">
+                    <span class="reviewkit-index-row__thread-count"><%= review.review_threads.size %></span>
+                    <span class="reviewkit-index-row__thread-label">total</span>
+                  </td>
+                  <td class="reviewkit-index-row__updated">
+                    <time datetime="<%= review.updated_at.iso8601 %>"><%= time_ago_in_words(review.updated_at) %> ago</time>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="reviewkit-index-empty hidden" data-reviewkit--review-index-target="empty">
+          <p>No reviews match the current filter.</p>
+        </div>
+      </section>
+    <% else %>
+      <section class="reviewkit-panel reviewkit-empty-state">
+        <p class="reviewkit-kicker">Ready for your first review</p>
+        <h2 class="text-2xl font-semibold tracking-tight text-slate-950">No reviews have been created yet.</h2>
+        <p class="max-w-2xl text-sm leading-7 text-slate-600">
+          Once your host application creates reviews through <code>Reviewkit::Reviews::Create.call</code>, they will appear here automatically.
+        </p>
+      </section>
+    <% end %>
+  </section>
+</main>

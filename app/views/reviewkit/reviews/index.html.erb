@@ -1,0 +1,11 @@
+<% unless reviewkit_frame_request? %>
+  <% content_for :head do %>
+    <%= reviewkit_page_assets %>
+  <% end %>
+
+  <%= reviewkit_page_module_tag %>
+<% end %>
+
+<%= reviewkit_wrap_in_frame do %>
+  <%= render "reviewkit/reviews/index_content", reviews: @reviews %>
+<% end %>

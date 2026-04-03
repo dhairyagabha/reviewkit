@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  mount Changeset::Engine => "/changeset"
+  mount Reviewkit::Engine => "/reviewkit"
 end

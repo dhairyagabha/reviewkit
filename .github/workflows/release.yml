@@ -19,7 +19,7 @@ jobs:
           bundler-cache: true
 
       - name: Build bundled engine assets
-        run: bundle exec rake changeset:build_assets
+        run: bundle exec rake reviewkit:build_assets
 
       - name: Prepare dummy database
         run: bundle exec bin/rails app:db:prepare
@@ -34,7 +34,7 @@ jobs:
         run: bundle exec bin/rails app:zeitwerk:check
 
       - name: Build gem
-        run: gem build changeset.gemspec
+        run: gem build reviewkit.gemspec
 
   release:
     needs: verify
@@ -55,7 +55,7 @@ jobs:
           bundler-cache: true
 
       - name: Build bundled engine assets
-        run: bundle exec rake changeset:build_assets
+        run: bundle exec rake reviewkit:build_assets
 
       - name: Publish gem with RubyGems Trusted Publishing
         uses: rubygems/release-gem@v1

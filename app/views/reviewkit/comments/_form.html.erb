@@ -1,0 +1,16 @@
+<%= form_with model: [thread, Reviewkit::Comment.new], class: "space-y-2 border-t border-slate-200 bg-slate-50 px-3 py-2.5" do |form| %>
+  <%= form.hidden_field :frame_id, value: local_assigns[:frame_id] %>
+  <%= form.hidden_field :view, value: local_assigns[:view_mode] %>
+  <label class="block">
+    <span class="mb-1 block text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">Reply</span>
+    <%= form.text_area :body,
+      rows: 2,
+      class: "reviewkit-textarea",
+      placeholder: "Add to the conversation..." %>
+  </label>
+
+  <div class="flex justify-end">
+    <%= form.submit "Reply",
+      class: "reviewkit-button reviewkit-button--secondary reviewkit-button--small" %>
+  </div>
+<% end %>

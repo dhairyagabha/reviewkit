@@ -11,7 +11,15 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[8.1].define(version: 2026_04_01_114000) do
-  create_table "changeset_comments", force: :cascade do |t|
+  create_table "reviewers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_reviewers_on_email", unique: true
+  end
+
+  create_table "reviewkit_comments", force: :cascade do |t|
     t.integer "author_id"
     t.string "author_type"
     t.text "body", null: false
@@ -20,11 +28,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_01_114000) do
     t.json "metadata", default: {}, null: false
     t.integer "review_thread_id", null: false
     t.datetime "updated_at", null: false
-    t.index ["author_type", "author_id"], name: "index_changeset_comments_on_author"
-    t.index ["review_thread_id"], name: "index_changeset_comments_on_review_thread_id"
+    t.index ["author_type", "author_id"], name: "index_reviewkit_comments_on_author"
+    t.index ["review_thread_id"], name: "index_reviewkit_comments_on_review_thread_id"
   end
 
-  create_table "changeset_documents", force: :cascade do |t|
+  create_table "reviewkit_documents", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.json "diff_cache", default: {}, null: false
     t.string "language", default: "plaintext", null: false
@@ -36,13 +44,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_01_114000) do
     t.integer "review_id", null: false
     t.string "status", default: "modified", null: false
     t.datetime "updated_at", null: false
-    t.index ["review_id", "path"], name: "index_changeset_documents_on_review_id_and_path", unique: true
-    t.index ["review_id", "position"], name: "index_changeset_documents_on_review_id_and_position"
-    t.index ["review_id"], name: "index_changeset_documents_on_review_id"
-    t.index ["status"], name: "index_changeset_documents_on_status"
+    t.index ["review_id", "path"], name: "index_reviewkit_documents_on_review_id_and_path", unique: true
+    t.index ["review_id", "position"], name: "index_reviewkit_documents_on_review_id_and_position"
+    t.index ["review_id"], name: "index_reviewkit_documents_on_review_id"
+    t.index ["status"], name: "index_reviewkit_documents_on_status"
   end
 
-  create_table "changeset_review_threads", force: :cascade do |t|
+  create_table "reviewkit_review_threads", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "document_id", null: false
     t.string "line_code", null: false
@@ -56,14 +64,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_01_114000) do
     t.string "side", default: "new", null: false
     t.string "status", default: "open", null: false
     t.datetime "updated_at", null: false
-    t.index ["document_id", "line_code"], name: "index_changeset_review_threads_on_document_id_and_line_code"
-    t.index ["document_id"], name: "index_changeset_review_threads_on_document_id"
-    t.index ["resolved_by_type", "resolved_by_id"], name: "index_changeset_review_threads_on_resolved_by"
-    t.index ["review_id"], name: "index_changeset_review_threads_on_review_id"
-    t.index ["status"], name: "index_changeset_review_threads_on_status"
+    t.index ["document_id", "line_code"], name: "index_reviewkit_review_threads_on_document_id_and_line_code"
+    t.index ["document_id"], name: "index_reviewkit_review_threads_on_document_id"
+    t.index ["resolved_by_type", "resolved_by_id"], name: "index_reviewkit_review_threads_on_resolved_by"
+    t.index ["review_id"], name: "index_reviewkit_review_threads_on_review_id"
+    t.index ["status"], name: "index_reviewkit_review_threads_on_status"
   end
 
-  create_table "changeset_reviews", force: :cascade do |t|
+  create_table "reviewkit_reviews", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "creator_id"
     t.string "creator_type"
@@ -76,22 +84,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_01_114000) do
     t.string "status", default: "draft", null: false
     t.string "title", null: false
     t.datetime "updated_at", null: false
-    t.index ["creator_type", "creator_id"], name: "index_changeset_reviews_on_creator"
-    t.index ["external_reference"], name: "index_changeset_reviews_on_external_reference"
-    t.index ["reviewable_type", "reviewable_id"], name: "index_changeset_reviews_on_reviewable"
-    t.index ["status"], name: "index_changeset_reviews_on_status"
+    t.index ["creator_type", "creator_id"], name: "index_reviewkit_reviews_on_creator"
+    t.index ["external_reference"], name: "index_reviewkit_reviews_on_external_reference"
+    t.index ["reviewable_type", "reviewable_id"], name: "index_reviewkit_reviews_on_reviewable"
+    t.index ["status"], name: "index_reviewkit_reviews_on_status"
   end
 
-  create_table "reviewers", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "email", null: false
-    t.string "name", null: false
-    t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_reviewers_on_email", unique: true
-  end
-
-  add_foreign_key "changeset_comments", "changeset_review_threads", column: "review_thread_id"
-  add_foreign_key "changeset_documents", "changeset_reviews", column: "review_id"
-  add_foreign_key "changeset_review_threads", "changeset_documents", column: "document_id"
-  add_foreign_key "changeset_review_threads", "changeset_reviews", column: "review_id"
+  add_foreign_key "reviewkit_comments", "reviewkit_review_threads", column: "review_thread_id"
+  add_foreign_key "reviewkit_documents", "reviewkit_reviews", column: "review_id"
+  add_foreign_key "reviewkit_review_threads", "reviewkit_documents", column: "document_id"
+  add_foreign_key "reviewkit_review_threads", "reviewkit_reviews", column: "review_id"
 end
